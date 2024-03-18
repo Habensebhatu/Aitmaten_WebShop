@@ -43,7 +43,6 @@
           <div class="text-center text-gray-600 py-4">No products found.</div>
         </ng-template>
 
-        <!-- Conditional rendering -->
         <div *ngIf="searchResults.length; else noResults"></div>
       </mat-menu>
 
@@ -56,7 +55,6 @@
             <a class="pl-0" mat-button routerLink="/" (click)="closeMenu()">{{"Home" | translate}}</a>
           </li>
           <li>
-            <!-- Categories dropdown menu -->
             <div class="inline-block">
               <button mat-button [matMenuTriggerFor]="categoriesMenu">
                 {{ "shop" | translate }} <mat-icon>arrow_drop_down</mat-icon>
