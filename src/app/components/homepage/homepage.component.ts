@@ -193,12 +193,12 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/Eritreseklederdracht.jpg",
+          file: "../assets/image/groente.jpeg",
         },
       ],
-      title: "Tilf Habesha/ትልፍ ሓበሻ",
+      title: "Verkoop uw groente direct uit onze voorraad",
       price: 103,
-      categoryName: "Kleding",
+      categoryName: "Groente",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
       description: "hhjdfhjfjhd",
@@ -211,12 +211,12 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/fidelat.jpeg",
+          file: "../assets/image/Fruit.jpeg",
         },
       ],
-      title: "Tigrigna Alphabets/ ፊደላት ትግርኛ",
+      title: "Verkoop uw fruit direct uit onze voorraad",
       price: 15.90,
-      categoryName: "Boeken",
+      categoryName: "Fruit",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
       description: "hhjdfhjfjhd",
@@ -229,12 +229,12 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/HairStyle.jpg",
+          file: "../assets/image/CHAMPIGNONS.jpeg",
         },
       ],
-      title: "hairStyle/ኣርቲፊሻል ጸጉሪ",
+      title: "Verkoop uw champignons direct uit onze voorraad",
       price: 21.05,
-      categoryName: "Cosmetica",
+      categoryName: "CHAMPIGNONS",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
       description: "hhjdfhjfjhd",
@@ -247,12 +247,12 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/Berbere1.jpg",
+          file: "../assets/image/knoflook.jpeg",
         },
       ],
-      title: "berbere Spice /በርበሬ",
+      title: "",
       price: 20,
-      categoryName: "Voedsel",
+      categoryName: "Knoflook",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
       description: "hhjdfhjfjhd",

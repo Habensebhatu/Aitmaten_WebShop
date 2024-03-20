@@ -16,6 +16,7 @@ export class AppProductGridComponent {
   @Input() products: Product[] | undefined;
   wishlistProductIds: string[] = [];
   private unsubscribe$ = new Subject<void>();
+  Quetity = 1;
   constructor( private router: Router, private cartService: CartService, private wishlistService: WishlistService, private _snackBar: MatSnackBar){
 
   }
@@ -23,12 +24,24 @@ export class AppProductGridComponent {
     this.router.navigate(['product', productId]);
   }
 
+  onRemoveQuantity(){
+    if(this.Quetity > 1){
+       this.Quetity--;
+    }
+    else(
+      this.Quetity
+    )
+  }
+
+  onAddQuantity(){
+   this.Quetity++;
+  }
   onAddToCart(product: Product): void {
     this.cartService.addToCart({
       categoryName: product.categoryName,
       title: product.title,
-      price: product.price,
-      quantity: 1,
+      price: product.price * product.kilo,
+      quantity: this.Quetity,
       imageUrl: product.imageUrls[0].file,
       productId: product.productId,
       categoryId: product.categoryId,

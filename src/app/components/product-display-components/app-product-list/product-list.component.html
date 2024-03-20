@@ -56,6 +56,15 @@
               product.description
             }}
           </p>
+          <div class="flex items-center border rounded-full w-32" style="border-color: #0d134e">
+            <button mat-icon-button (click)="onRemoveQuantity()">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="mx-2">{{ 1 }}</span>
+            <button mat-icon-button (click)="onAddQuantity()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </article>

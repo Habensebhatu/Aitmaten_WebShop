@@ -8,12 +8,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   providedIn: "root",
 })
 export class WishlistService {
-  private apiUrlAdd = 'https://webshopfilimon.azurewebsites.net/api/Wishlist/AddToWishList';
-  private apiUrlGet = 'https://webshopfilimon.azurewebsites.net/api/Wishlist/GetWishlistProducts';
-  private apiUrlDelete = 'https://webshopfilimon.azurewebsites.net/api/Wishlist/DeleteFromWishlist';
-  // private apiUrlAdd = "https://localhost:7087/api/Wishlist/AddToWishList";
-  // private apiUrlGet = "https://localhost:7087/api/Wishlist/GetWishlistProducts";
-  // private apiUrlDelete = "https://localhost:7087/api/Wishlist/DeleteFromWishlist";
+  private apiUrlAdd = "https://localhost:7087/api/Wishlist/AddToWishList";
+  private apiUrlGet = "https://localhost:7087/api/Wishlist/GetWishlistProducts";
+  private apiUrlDelete = "https://localhost:7087/api/Wishlist/DeleteFromWishlist";
   private wishlistCount = new BehaviorSubject<number>(0);
   wishlistCount$ = this.wishlistCount.asObservable();
 
