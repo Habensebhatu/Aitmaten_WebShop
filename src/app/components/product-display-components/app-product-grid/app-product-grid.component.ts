@@ -17,6 +17,8 @@ export class AppProductGridComponent {
   wishlistProductIds: string[] = [];
   private unsubscribe$ = new Subject<void>();
   Quetity = 1;
+  pieceQuantity = 1;
+  crateQuantity = 1;
   constructor( private router: Router, private cartService: CartService, private wishlistService: WishlistService, private _snackBar: MatSnackBar){
 
   }
@@ -24,32 +26,86 @@ export class AppProductGridComponent {
     this.router.navigate(['product', productId]);
   }
 
-  onRemoveQuantity(){
-    if(this.Quetity > 1){
-       this.Quetity--;
-    }
-    else(
-      this.Quetity
-    )
-  }
 
-  onAddQuantity(){
-   this.Quetity++;
+   
+  quantities = new Map<string, { piece: number, crate: number, message: boolean }>();
+
+onAddQuantity(productId: string, itemType: string, instock: number) {
+  let quantity = this.quantities.get(productId) || { piece: 1, crate: 1, message: false };
+  if (itemType === 'piece' && quantity.piece < instock) {
+    quantity.piece++;
+    quantity.message = false; 
+  } else if (itemType === 'crate' && quantity.crate < instock) {
+    quantity.crate++;
+    quantity.message = false;
+  } else {
+    // Only show the message for the specific product
+    quantity.message = true;
   }
-  onAddToCart(product: Product): void {
+  this.quantities.set(productId, quantity);
+}
+
+  
+  onRemoveQuantity(productId: string, itemType: string) {
+    let quantity = this.quantities.get(productId);
+    if (!quantity) return;
+  
+    if (itemType === 'piece' && quantity.piece > 1) {
+      quantity.piece--;
+    } else if (itemType === 'crate' && quantity.crate > 1) {
+      quantity.crate--;
+    }
+    this.quantities.set(productId, quantity);
+  }
+  
+
+  onAddPieceToCart(product: Product, piecePrice: number): void {
+    console.log(' piecePrice',  piecePrice)
+    let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
+    console.log('currentQuantity', currentQuantity)
     this.cartService.addToCart({
       categoryName: product.categoryName,
       title: product.title,
-      price: product.price * product.kilo,
-      quantity: this.Quetity,
+      price: piecePrice,
+      quantity: currentQuantity.piece,
       imageUrl: product.imageUrls[0].file,
       productId: product.productId,
       categoryId: product.categoryId,
       description: product.description,
       sessionId : product.sessionId,
-      kilo : product.kilo
+      kilo :1,
+      cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
     });
-  }
+    this.quantities.set(product.productId, { 
+      ...currentQuantity,
+      piece: currentQuantity.piece, // Increment the piece quantity.
+      message: currentQuantity.piece >= product.piece // Set the message flag based on the stock.
+    });
+}
+
+onAddCrateToCart(product: Product, cratePrice: number): void {
+  let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
+  const tottalcrateQuantity =  currentQuantity.crate * product.crate
+    this.cartService.addToCart({
+      categoryName: product.categoryName,
+      title: product.title,
+      price: cratePrice,
+      quantity: tottalcrateQuantity, 
+      imageUrl: product.imageUrls[0].file,
+      productId: product.productId,
+      categoryId: product.categoryId,
+      description: product.description,
+      sessionId : product.sessionId,
+      kilo :product.crate,
+      cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
+    });
+    this.quantities.set(product.productId, { 
+      ...currentQuantity,
+      crate: currentQuantity.crate, // Increment the piece quantity.
+      message: currentQuantity.crate >= product.piece // Set the message flag based on the stock.
+    });
+}
+
 
   isInWishlist(productId: string): boolean {
     return this.wishlistProductIds.includes(productId);

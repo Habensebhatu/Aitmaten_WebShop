@@ -101,6 +101,7 @@ register();
     MatInputModule,
     MatIconModule,
     MatBadgeModule,
+    MatTableModule,
 
     TranslateModule.forRoot({
       loader: {

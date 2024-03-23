@@ -42,14 +42,15 @@ export class WishlistComponent {
     this.cartService.addToCart({
       categoryName: product.categoryName,
       title: product.title,
-      price: product.price,
+      price: product.piecePrice,
       quantity: 1,
       imageUrl: product.imageUrls[0].file,
       productId: product.productId,
       categoryId: product.categoryId,
       description: product.description,
       sessionId: product.sessionId,
-      kilo : product.kilo
+      kilo : 1,
+      cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
     });
   }
 

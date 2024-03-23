@@ -90,14 +90,15 @@ currentIndex = 0;
       this.cartService.addToCartFromProductDetail({
         categoryName: this.product.categoryName,
         title: this.product.title,
-        price: this.product.price,
+        price: this.product.piecePrice,
         quantity: this.Quetity,
-        kilo : this.product.kilo,
+        kilo :2,
         imageUrl: this.product.imageUrls[0].file,
         productId: this.product.productId,
         categoryId: this.product.categoryId,
         description: this.product.description,
-        sessionId: this.product.sessionId
+        sessionId: this.product.sessionId,
+        cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
 
       });
     }

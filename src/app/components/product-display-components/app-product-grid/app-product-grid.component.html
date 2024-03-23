@@ -4,97 +4,163 @@
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div *ngFor="let product of products">
           <article class="wish-product relative shadow-lg transition-all duration-300">
+            <!-- Product Image -->
             <div class="product-image relative">
               <a>
                 <img [src]="product.imageUrls[0].file" class="w-full h-64 object-cover" />
               </a>
-              <div
-                class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                <button (click)="onAddToCart(product)"
-                  class="w-10 h-10 flex items-center justify-center mx-1 p-1 bg-white hover:bg-gray-500 text-gay-500 hover:text-white rounded-full">
-                  <mat-icon>shopping_cart</mat-icon>
-                  <i class="addCart-icon"></i>
-                </button>
-                <button
-                  class="w-10 h-10 flex items-center justify-center mx-1 p-1 bg-white hover:bg-blue-500 text-blue-500 hover:text-white rounded-full"
-                  (click)="navigateToProductDetails(product.productId)">
-                  <mat-icon>visibility</mat-icon>
-                </button>
-                <div (click)="onAddToWishlist(product.productId)"
-                  class="w-10 h-10 flex items-center justify-center mx-1 p-1 bg-white hover:bg-red-500 text-red-500 hover:text-white rounded-full cursor-pointer">
-                  <mat-icon *ngIf="!isInWishlist(product.productId)" aria-hidden="false"
-                    aria-label="Example heart icon">favorite_border</mat-icon>
-                  <mat-icon *ngIf="isInWishlist(product.productId)" aria-hidden="false"
-                    aria-label="Example heart icon">favorite</mat-icon>
-                </div>
+              <!-- Overlay Text for Aanbieding or similar highlight -->
+              <div class="absolute top-0 left-0 bg-purple-600 text-white p-2">
+                Aanbieding
               </div>
             </div>
-            <div class="product-caption mt-4 cursor-pointer">
-              <div class="flex justify-between items-center">
-                <div class="product-manufacturer">
-                  <p class="text-lg">{{ product.categoryName }}</p>
-                </div>
+          
+            <!-- Product Details -->
+            <div class="product-caption mt-4 cursor-pointer p-4">
+              <div class="flex justify-between items-center mb-2">
+                <h4 class="product-name text-lg font-bold">
+                  {{ product.title }}
+                </h4>
               </div>
-              <h4 class="product-name mt-2">
-                <p>{{ product.title }}</p>
-              </h4>
-              <!-- <p class="product-price mt-2">
-                <span>€{{ product.price }}</span>
-              </p> -->
-              <p class="product-price mt-2">
-                <span>kilo{{product.kilo}}</span>
-              </p>
-              <div class="flex justify-between items-center">
-                <div class="flex items-center border rounded-full" style="border-color: #0d134e">
-                  <button mat-icon-button (click)="onRemoveQuantity()" class="px-3">
+              
+              <!-- Meta Info: Land van Oorsprong, Kwaliteitsklasse, etc. -->
+              <!-- <div class="product-meta mb-4">
+                <p><strong>Land van Oorsprong:</strong> {{ product.categoryName }}</p>
+                <p><strong>Kwaliteitsklasse:</strong> 1</p>
+              </div> -->
+              <hr>
+              <div class="mt-4">
+                <span >Op voorraad:{{product.piece}}</span>
+              </div>
+              <div class="mt-4" *ngIf="quantities.get(product.productId)?.message">
+                <span>Het maximum is bereikt</span>
+              </div>
+             
+              <div class="mt-8">
+                <span>Fust{{product.crate}}</span>
+              </div>
+              <!-- Quantity Selector for Crate -->
+              <div class="flex flex-col sm:flex-row justify-between items-center mb-4 mt-2">
+                <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0" style="border-color: #0d134e">
+                  <button mat-icon-button (click)="onRemoveQuantity(product.productId, 'crate')" class="px-3">
                     <mat-icon>remove</mat-icon>
                   </button>
-                  <span class="mx-2">{{ Quetity }}</span>
-                  <button mat-icon-button (click)="onAddQuantity()" class="px-3">
+                  <span class="mx-2">{{ quantities.get(product.productId)?.crate || 1 }}</span>
+                  <button mat-icon-button (click)="onAddQuantity(product.productId, 'crate', product.piece)" class="px-3">
                     <mat-icon>add</mat-icon>
                   </button>
                 </div>
-
-                <!-- Price button -->
-                <div class="ml-4">
-                  <button (click)="onAddToCart(product)"
-                    class="w-auto h-10 flex items-center justify-center px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-colors duration-300">
-                    €{{ product.price }}
-                  </button>
-                </div>
-
+                <button (click)="onAddCrateToCart(product,product.cratePrice)"
+                  class="w-auto h-10 flex items-center justify-center px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
+                  €{{ product.cratePrice }}
+                </button>
               </div>
-              <p class="product-price mt-8">
+
+              <p class="mt-8">
                 <span>stuk(1)</span>
               </p>
-              <div class="flex justify-between items-center">
-                <div class="flex items-center border rounded-full" style="border-color: #0d134e">
-                  <button mat-icon-button (click)="onRemoveQuantity()" class="px-3">
+              <!-- Quantity Selector for Piece -->
+              <div class="flex flex-col sm:flex-row justify-between items-center mt-2">
+                <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0" style="border-color: #0d134e">
+                  <button mat-icon-button (click)="onRemoveQuantity(product.productId, 'piece')" class="px-3">
                     <mat-icon>remove</mat-icon>
                   </button>
-                  <span class="mx-2">{{ Quetity }}</span>
-                  <button mat-icon-button (click)="onAddQuantity()" class="px-3">
+                  <span class="mx-2">{{ quantities.get(product.productId)?.piece || 1 }}</span>
+                  <button mat-icon-button (click)="onAddQuantity(product.productId, 'piece', product.piece)" class="px-3">
                     <mat-icon>add</mat-icon>
                   </button>
                 </div>
-
-                <!-- Price button -->
-                <div class="ml-4">
-                  <button (click)="onAddToCart(product)"
-                    class="w-auto h-10 flex items-center justify-center px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-colors duration-300">
-                    €{{ product.price }}
-                  </button>
-                </div>
-
+                <button (click)="onAddPieceToCart(product, product.piecePrice)"
+                  class="w-auto h-10 flex items-center justify-center px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
+                  €{{ product.piecePrice }}
+                </button>
               </div>
-
-
             </div>
-
-
           </article>
+          
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
+
+<!-- <article class="wish-product relative shadow-lg transition-all duration-300">
+  <div class="product-image relative">
+    <a>
+      <img [src]="product.imageUrls[0].file" class="w-full h-64 object-cover" />
+    </a>
+    <div
+      class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <button (click)="onAddToCart(product)"
+        class="w-10 h-10 flex items-center justify-center mx-1 p-1 bg-white hover:bg-gray-500 text-gay-500 hover:text-white rounded-full">
+        <mat-icon>shopping_cart</mat-icon>
+        <i class="addCart-icon"></i>
+      </button>
+      <button
+        class="w-10 h-10 flex items-center justify-center mx-1 p-1 bg-white hover:bg-blue-500 text-blue-500 hover:text-white rounded-full"
+        (click)="navigateToProductDetails(product.productId)">
+        <mat-icon>visibility</mat-icon>
+      </button>
+      <div (click)="onAddToWishlist(product.productId)"
+        class="w-10 h-10 flex items-center justify-center mx-1 p-1 bg-white hover:bg-red-500 text-red-500 hover:text-white rounded-full cursor-pointer">
+        <mat-icon *ngIf="!isInWishlist(product.productId)" aria-hidden="false"
+          aria-label="Example heart icon">favorite_border</mat-icon>
+        <mat-icon *ngIf="isInWishlist(product.productId)" aria-hidden="false"
+          aria-label="Example heart icon">favorite</mat-icon>
+      </div>
+    </div>
+  </div>
+  <div class="product-caption mt-4 cursor-pointer">
+    <div class="flex justify-between items-center">
+      <div class="product-manufacturer">
+        <p class="text-lg">{{ product.categoryName }}</p>
+      </div>
+    </div>
+    <h4 class="product-name mt-2">
+      <p>{{ product.title }}</p>
+    </h4>
+    <p class="product-price mt-2">
+      <span>Fust{{product.crate}}</span>
+    </p>
+    <div class="flex justify-between items-center">
+      <div class="flex items-center border rounded-full" style="border-color: #0d134e">
+        <button mat-icon-button (click)="onRemoveQuantity(product.productId, 'crate')" class="px-3">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <span class="mx-2">{{ quantities.get(product.productId)?.crate || 1 }}</span>
+        <button mat-icon-button (click)="onAddQuantity(product.productId, 'crate')" class="px-3">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="ml-4">
+        <button (click)="onAddCrateToCart(product,product.cratePrice)"
+          class="w-auto h-10 flex items-center justify-center px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-colors duration-300">
+          €{{ product.cratePrice}}
+        </button>
+      </div>
+
+    </div>
+    <p class="product-price mt-8">
+      <span>stuk{{product.piece}}</span>
+    </p>
+    <div class="flex justify-between items-center">
+      <div class="flex items-center border rounded-full" style="border-color: #0d134e">
+        <button mat-icon-button (click)="onRemoveQuantity(product.productId, 'piece')" class="px-3">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <span class="mx-2">{{ quantities.get(product.productId)?.piece || 1 }}</span>
+        <button mat-icon-button (click)="onAddQuantity(product.productId, 'piece')" class="px-3">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="ml-4">
+        <button (click)="onAddPieceToCart(product, product.piecePrice)"
+          class="w-auto h-10 flex items-center justify-center px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-colors duration-300">
+          €{{ product.piecePrice}}
+        </button>
+      </div>
+    </div>
+  </div>
+</article> -->

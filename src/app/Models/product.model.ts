@@ -4,9 +4,11 @@ export interface Cart {
  export interface Product {
    productId: string;
    categoryId: string;
-    title: string;
-     price: number;
-     kilo: number;
+   title: string;
+  piecePrice: number;
+     cratePrice: number;
+    crate: number;
+     piece: number;
     categoryName: string;
     description: string;
     imageUrls: ImageUpdateModel[];
@@ -23,6 +25,7 @@ export interface Cart {
   
   export interface ProductAddCart {
     productId: string;
+    cartId : string;
     categoryId: string;
      title: string;
       price: number;

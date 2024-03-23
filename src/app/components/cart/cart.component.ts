@@ -18,16 +18,31 @@ export class CartComponent {
   }
   
   Products : Array<ProductAddCart> = [];
+  displayedColumns: string[] = [
+    'AFBEELDING',
+    'PRODUCT',
+    'AANTAL',
+    'INHOUD',
+    'STUKSPRIJS',
+    'TOTAAL',
+    'action'
+  ];
+ 
+  dataSource: Array<ProductAddCart> = [];
   
 constructor(private cartService: CartService, private http: HttpClient, private storeService: StoreService){}
 ngOnInit(){
   this.cartService.cart.subscribe((_cart: CartI)=>{
     this.cart = _cart;
     this.Products = this.cart.items;
+    this.dataSource = this.cart.items
+    console.log("this.dataSource",   this.dataSource)
     this.calculatorShippingCost();
   })
-  
+
 }
+
+
 
 getLastProductCategory() {
   if (this.Products && this.Products.length > 0) {

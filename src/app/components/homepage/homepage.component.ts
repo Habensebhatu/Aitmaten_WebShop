@@ -197,7 +197,6 @@ export class HomepageComponent {
         },
       ],
       title: "Verkoop uw groente direct uit onze voorraad",
-      price: 103,
       categoryName: "Groente",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
@@ -205,7 +204,10 @@ export class HomepageComponent {
       quantity: 3,
       sessionId: "ddd445556",
       isPopular: true,
-      kilo: 2
+      piecePrice: 2,
+       cratePrice: 3,
+       crate: 33,
+       piece: 3
     },
     {
       imageUrls: [
@@ -215,7 +217,6 @@ export class HomepageComponent {
         },
       ],
       title: "Verkoop uw fruit direct uit onze voorraad",
-      price: 15.90,
       categoryName: "Fruit",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
@@ -223,7 +224,10 @@ export class HomepageComponent {
       quantity: 3,
       sessionId: "ddd445556",
       isPopular: true,
-      kilo: 2
+      piecePrice: 2,
+       cratePrice: 3,
+       crate: 33,
+       piece: 3
     },
     {
       imageUrls: [
@@ -233,7 +237,6 @@ export class HomepageComponent {
         },
       ],
       title: "Verkoop uw champignons direct uit onze voorraad",
-      price: 21.05,
       categoryName: "CHAMPIGNONS",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
@@ -241,7 +244,10 @@ export class HomepageComponent {
       quantity: 3,
       sessionId: "ddd445556",
       isPopular: true,
-      kilo: 2
+      piecePrice: 2,
+       cratePrice: 3,
+       crate: 33,
+       piece: 3
     },
     {
       imageUrls: [
@@ -251,7 +257,6 @@ export class HomepageComponent {
         },
       ],
       title: "",
-      price: 20,
       categoryName: "Knoflook",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
@@ -259,7 +264,10 @@ export class HomepageComponent {
       quantity: 3,
       sessionId: "ddd445556",
       isPopular: true,
-      kilo: 2
+      piecePrice: 2,
+      cratePrice: 3,
+      crate: 33,
+      piece: 3
     },
    
     {
@@ -270,7 +278,6 @@ export class HomepageComponent {
         },
       ],
       title: "Bella Megogo (ዓብይ መጎጎ)",
-      price: 543,
       categoryName: "keuken",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
@@ -278,7 +285,10 @@ export class HomepageComponent {
       quantity: 3,
       sessionId: "ddd445556",
       isPopular: true,
-      kilo: 2
+      piecePrice: 2,
+      cratePrice: 3,
+      crate: 33,
+      piece: 3
     },
    
     

@@ -22,8 +22,6 @@ export class CartService {
     // Get existing sessionId or generate a new one
   private getSessionId(): string {
     let sessionId = localStorage.getItem('sessionId');
-    console.log("existingsessionId", sessionId)
-    console.log("check",!sessionId)
     if (!sessionId) {
       sessionId = this.generateSessionId();
       localStorage.setItem('sessionId', sessionId);
@@ -41,16 +39,14 @@ export class CartService {
     }
 
     loadCartFromServer() {
-        console.log("getsessionID", this.sessionId);
         const token = localStorage.getItem('token');
-        console.log("token", token);
         let headers = new HttpHeaders();
         if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
-            console.log("headers", headers);
+            
         }
-        console.log("headers", headers);
         this.httpClient.get<ProductAddCart[]>(`${this.apiUrl}?sessionId=${this.sessionId}`, { headers }).subscribe(items => {
+            console.log("itemsitems", items)
             const updatedcart = { items: items };
             this.cart.next(updatedcart);
         });
@@ -58,7 +54,6 @@ export class CartService {
     
 
     addToCart(item: ProductAddCart): void {
-        console.log("item", item)
         item.sessionId = this.sessionId;
         const token = localStorage.getItem('token');
         let headers = new HttpHeaders();
@@ -67,15 +62,18 @@ export class CartService {
         }
         this.httpClient.post<ProductAddCart>(`${this.apiUrl}`,item,{ headers }).subscribe(
             response => {
+          
                 const items = [...this.cart.value.items];
-                const itemInCart = items.find((_item) => _item.productId === item.productId);
+                const itemInCart = items.find((_item) => _item.productId === item.productId && _item.price == item.price);
                 if (itemInCart) {
-                    itemInCart.quantity += 1;
+                    itemInCart.quantity += item.quantity;
                 } else {
                     items.push(item);
                 }
-                const updatedCart = { items };
-                this.cart.next(updatedCart);
+                // const updatedCart = { items };
+                // console.log(" response.cartId response.cartId", response.cartId)
+                // this.cart.next(updatedCart);
+                this.loadCartFromServer();
                 this._snackBar.open('1 item added to cart.', 'Ok', { duration: 3000 });
             },
             error => {
@@ -83,6 +81,35 @@ export class CartService {
             }
         );
     }
+
+    // addcartPriceCrate(item: ProductAddCart, quantityCrate: number): void {
+    //     item.sessionId = this.sessionId;
+    //     const token = localStorage.getItem('token');
+    //     let headers = new HttpHeaders();
+    //     if (token) {
+    //         headers = headers.set('Authorization', `Bearer ${token}`)
+    //     }
+
+    //     this.httpClient.post<ProductAddCart>(`${this.apiUrl}`,item,{ headers }).subscribe(
+    //         response => {
+    //             //    item.quantity = item.quantity / quantityCrate
+    //             const items = [...this.cart.value.items];
+    //             const itemInCart = items.find((_item) => _item.productId === item.productId);
+    //             if (itemInCart) {
+    //                 itemInCart.quantity += item.quantity;
+    //             } else {
+    //                 items.push(item);
+    //             }
+    //             const updatedCart = { items };
+    //             this.cart.next(updatedCart);
+    //             console.log("updatedCart", updatedCart)
+    //             this._snackBar.open('1 item added to cart.', 'Ok', { duration: 3000 });
+    //         },
+    //         error => {
+    //             console.error('Error adding product to cart', error);
+    //         }
+    //     );
+    // }
     
 
     addToCartFromProductDetail(item: ProductAddCart): void {
@@ -102,8 +129,11 @@ export class CartService {
                 } else {
                     items.push(item);
                 }
-                const updatedCart = { items };
-                this.cart.next(updatedCart);
+               
+                // const updatedCart = { items };
+                // console.log("updatedCart", updatedCart)
+                // this.cart.next(updatedCart);
+                this.loadCartFromServer();
                 this._snackBar.open('1 item added to cart.', 'Ok', { duration: 3000 });
             },
             error => {
@@ -147,10 +177,11 @@ export class CartService {
             headers = headers.set('Authorization', `Bearer ${token}`);
             console.log("headers", headers);
         }
-        this.httpClient.delete(`${this.apiUrl}/${item.productId}?sessionId=${this.sessionId}`,{ headers }).subscribe(
+        console.log("hhjdhjdkfhj", item.cartId )
+        this.httpClient.delete(`${this.apiUrl}/${item.cartId}?sessionId=${this.sessionId}`,{ headers }).subscribe(
             response => {
                 const filteredItems = this.cart.value.items.filter(
-                    (_item) => _item.productId !== item.productId
+                    (_item) => _item.cartId !== item.cartId
                 );
                 if (updateCart) {
                     this.cart.next({ items: filteredItems });
