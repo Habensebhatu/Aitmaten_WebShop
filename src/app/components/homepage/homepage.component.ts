@@ -28,12 +28,12 @@ export class HomepageComponent {
   wishlistProductIds: string[] = [];
   slides = [
     {
-      image: "../assets/image/bgwebshop.png",
+      image: "../assets/image/heroimage.webp",
       //  image: "../assets/image/store2image.jpeg"
     },
     {
       // image: "../assets/image/bgwebshop.png",
-       image: "../assets/image/storeimage.jpeg",
+       image: "../assets/image/heroimges.webp",
        animationClass: "",
        promoTitle: "",
        promoText: "",
@@ -193,7 +193,7 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/groente.jpeg",
+          file: "../assets/image/groeten.webp",
         },
       ],
       title: "Verkoop uw groente direct uit onze voorraad",
@@ -213,7 +213,7 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/Fruit.jpeg",
+          file: "../assets/image/fruits.webp",
         },
       ],
       title: "Verkoop uw fruit direct uit onze voorraad",
@@ -237,7 +237,7 @@ export class HomepageComponent {
         },
       ],
       title: "Verkoop uw champignons direct uit onze voorraad",
-      categoryName: "CHAMPIGNONS",
+      categoryName: "Chamoignons",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
       description: "hhjdfhjfjhd",
@@ -256,7 +256,7 @@ export class HomepageComponent {
           file: "../assets/image/knoflook.jpeg",
         },
       ],
-      title: "",
+      title: "Verkoop uw Knoflook direct uit onze voorraad",
       categoryName: "Knoflook",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
@@ -274,11 +274,11 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/Bellamegogo1.jpeg",
+          file: "../assets/image/cress.webp",
         },
       ],
-      title: "Bella Megogo (ዓብይ መጎጎ)",
-      categoryName: "keuken",
+      title: "Verkoop uw Knoflook direct uit onze voorraad",
+      categoryName: "Cressen",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
       description: "hhjdfhjfjhd",
@@ -290,6 +290,28 @@ export class HomepageComponent {
       crate: 33,
       piece: 3
     },
+
+    {
+      imageUrls: [
+        {
+          index: 0,
+          file: "../assets/image/Kruiden.webp",
+        },
+      ],
+      title: "Verkoop uw Knoflook direct uit onze voorraad",
+      categoryName: "Kruiden",
+      productId: "jhjjjk",
+      categoryId: "vvvvvvv",
+      description: "hhjdfhjfjhd",
+      quantity: 3,
+      sessionId: "ddd445556",
+      isPopular: true,
+      piecePrice: 2,
+      cratePrice: 3,
+      crate: 33,
+      piece: 3
+    },
+   
    
     
   ];

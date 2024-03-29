@@ -22,12 +22,14 @@
             <p class="text-xl">{{ product.categoryName }}</p>
           </div>
         </div>
-        <h4 class="product-name">
+        <div class="product-name">
           <p>{{ product.title }}</p>
-        </h4>
-        <p class="product-price">
-          <span>€{{ product.piecePrice}}</span>
-        </p>
+        </div>
+        <mat-card-actions class="mt-5">
+          <button mat-raised-button  color="warn">
+         shop
+          </button>
+        </mat-card-actions>
       </div>
     </div>
     </div>

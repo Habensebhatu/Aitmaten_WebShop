@@ -104,4 +104,14 @@ export class StoreService {
   getProductsById(productId: string): Observable<Product> {
     return this.httpClient.get<Product>(`${this.apiUrl}/${productId}`);
   }
+
+  // In your product.service.ts or a relevant service file
+
+  updateProductStock(productId: string, newStock: number): Observable<any> {
+  console.log("productIdproductId", productId)
+  console.log("newStocknewStocknewStock", newStock)
+    return this.httpClient.post(`${this.apiUrl}/UpdateProductStock`, { productId, newStock });
+  }
+  
+
 }

@@ -13,14 +13,7 @@ import { StoreService } from "src/app/service/store.service";
   styleUrls: ["./shop.component.css"],
 })
 export class ShopComponent {
-  // prices = [
-  //   "0 - €5,00, ",
-  //   "€5,00 - €10,00",
-  //   "€10,00 - €15,00",
-  //   "€15,00 - €20,00",
-  //   "€20,00 -  €25,00",
-  //   "€25,00  &  meer",
-  // ];
+  
  
   activeView: "grid" | "list" = "grid";
   products: Product[] | undefined;

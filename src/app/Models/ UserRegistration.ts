@@ -9,6 +9,7 @@ export class UserRegistration {
     public address?: Address;
     public phoneNumber?: string;
     public gender?: Gender;
+    public nameid? : string;
     
    
 

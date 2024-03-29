@@ -1,25 +1,32 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Cart, CartI, Product, ProductAddCart } from '../Models/product.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { OrderModel } from '../Models/Order';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CartService {
     private apiUrl = 'https://localhost:7087/api/Cart';
+    private apiUOrder = 'https://localhost:7087/api/Order';
     cart = new BehaviorSubject<CartI>({ items: [] });
     private _showMenu = new Subject<void>();
     showMenu$ = this._showMenu.asObservable();
      sessionId: string ;
+     private checkoutTrigger = new Subject<void>();
+     checkoutTriggered$ = this.checkoutTrigger.asObservable();
 
-    constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient) {
+    constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient, ) {
         this.sessionId = this.getSessionId();
         this.loadCartFromServer();
     }
 
-    // Get existing sessionId or generate a new one
+      triggerCheckout() {
+        this.checkoutTrigger.next();
+      }
+
   private getSessionId(): string {
     let sessionId = localStorage.getItem('sessionId');
     if (!sessionId) {
@@ -80,37 +87,7 @@ export class CartService {
                 console.error('Error adding product to cart', error);
             }
         );
-    }
-
-    // addcartPriceCrate(item: ProductAddCart, quantityCrate: number): void {
-    //     item.sessionId = this.sessionId;
-    //     const token = localStorage.getItem('token');
-    //     let headers = new HttpHeaders();
-    //     if (token) {
-    //         headers = headers.set('Authorization', `Bearer ${token}`)
-    //     }
-
-    //     this.httpClient.post<ProductAddCart>(`${this.apiUrl}`,item,{ headers }).subscribe(
-    //         response => {
-    //             //    item.quantity = item.quantity / quantityCrate
-    //             const items = [...this.cart.value.items];
-    //             const itemInCart = items.find((_item) => _item.productId === item.productId);
-    //             if (itemInCart) {
-    //                 itemInCart.quantity += item.quantity;
-    //             } else {
-    //                 items.push(item);
-    //             }
-    //             const updatedCart = { items };
-    //             this.cart.next(updatedCart);
-    //             console.log("updatedCart", updatedCart)
-    //             this._snackBar.open('1 item added to cart.', 'Ok', { duration: 3000 });
-    //         },
-    //         error => {
-    //             console.error('Error adding product to cart', error);
-    //         }
-    //     );
-    // }
-    
+    }    
 
     addToCartFromProductDetail(item: ProductAddCart): void {
         item.sessionId = this.sessionId;
@@ -226,10 +203,10 @@ export class CartService {
         );
     }
 
-     // private saveCartToLocalStorage(cart: Cart) {
-    //     console.log("cart", cart);
-    //     localStorage.setItem('cart', JSON.stringify(cart));
-    // }
 
+    addOrder(order: OrderModel): Observable<OrderModel> {
+        console.log("order", order)
+        return this.httpClient.post<OrderModel>(`${this.apiUOrder}`, order);
+      }
 
 }

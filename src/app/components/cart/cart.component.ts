@@ -1,16 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { loadStripe } from '@stripe/stripe-js';
+import { Subscription } from 'rxjs';
+import { UserRegistration } from 'src/app/Models/ UserRegistration';
+import { OrderDetail, OrderModel } from 'src/app/Models/Order';
 import {CartI,  ProductAddCart } from 'src/app/Models/product.model';
 import { CartService } from 'src/app/service/cart.service';
 import { StoreService } from 'src/app/service/store.service';
+import { UserRegistrationService } from 'src/app/service/user-registration.service';
 
 @Component({
   selector: 'app-cart',
   templateUrl:'./cart.component.html' 
  
 })
-export class CartComponent {
+export class CartComponent{
   phoneNumber = '061790373929';
   shippingCost: number = 7.65;
   cart: CartI = {items:[
@@ -29,16 +34,19 @@ export class CartComponent {
   ];
  
   dataSource: Array<ProductAddCart> = [];
-  
-constructor(private cartService: CartService, private http: HttpClient, private storeService: StoreService){}
+ checkoutSubscription: Subscription | undefined;
+constructor(private cartService: CartService, private http: HttpClient, private storeService: StoreService, private userService: UserRegistrationService, private router: Router){}
 ngOnInit(){
   this.cartService.cart.subscribe((_cart: CartI)=>{
     this.cart = _cart;
     this.Products = this.cart.items;
     this.dataSource = this.cart.items
-    console.log("this.dataSource",   this.dataSource)
     this.calculatorShippingCost();
   })
+
+  this.checkoutSubscription = this.cartService.checkoutTriggered$.subscribe(() => {
+    this.onCheckout();
+  });
 
 }
 
@@ -82,7 +90,6 @@ getProducts(){
   }
 
 onAddQuantity(item: ProductAddCart): void {
-  console.log("Quantity", item)
   this.cartService.addToCart(item);
 }
 
@@ -98,18 +105,65 @@ onClearCart(): void {
 onRemoveFromCart(item: ProductAddCart): void {
   this.cartService.removeFromCart(item);
 }
+
+
 onCheckout(): void {
-  this.http
-    .post('https://webshopfilimon.azurewebsites.net/api/Stripe/checkout', {
-      items: this.cart.items,
-    })
-    .subscribe(async (res: any) => {
-      let stripe = await loadStripe('pk_live_51NTNZBD7MblCQnUpIt68VrorlFv5MOncjPGTUCt4wyFZKWSXQZpDTIvoWSUQ3JTYzXluSlEZrFMGy79pY1voYivB00oYQHH66M');
-      stripe?.redirectToCheckout({
-        sessionId: res.id,
-      });
-    });
+  this.userService.currentUser.subscribe(user => {
+    if (!user) return; // Early exit if user is null or undefined
+    
+    // dataSource has OrderDetail
+    const orderDetails: OrderDetail[] = this.dataSource.map(item => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      amountTotal: item.price * item.quantity,
+      contents: item.kilo,
+      price: item.price
+    }));
+  
+    const order: OrderModel = {
+      UserId: user.nameid, // Use the userId from the subscription
+      orderDetails: orderDetails
+    };
    
+    this.cartService.addOrder(order).subscribe({
+      next: (result) => {
+        // Aggregate quantities for the same productId after the order has been placed
+        const aggregatedQuantities = orderDetails.reduce((acc: {[key: string]: number}, detail) => {
+          const productId = detail.productId.toString(); // Ensure productId is a string, adjust if necessary
+          if (acc[productId]) {
+            acc[productId] += detail.quantity;
+          } else {
+            acc[productId] = detail.quantity;
+          }
+          return acc;
+        }, {});
+        
+        
+        // Now update the stock for each product based on the aggregated quantities
+        Object.entries(aggregatedQuantities).forEach(([productId, quantity]) => {
+          this.storeService.updateProductStock(productId, quantity).subscribe({
+            next: (updateResult) => {
+              console.log(`Stock updated for product ${productId}`);
+            },
+            error: (error) => {
+              console.error(`Failed to update stock for product ${productId}`, error);
+            }
+          });
+        });
+        
+        this.router.navigate(['/payment-success']);
+      },
+      error: (error) => {
+        console.error(`Failed to place order`, error);
+      }
+    });
+  });
+}
+
+ngOnDestroy() {
+  if (this.checkoutSubscription) {
+    this.checkoutSubscription.unsubscribe();
+  }
 }
 
 }

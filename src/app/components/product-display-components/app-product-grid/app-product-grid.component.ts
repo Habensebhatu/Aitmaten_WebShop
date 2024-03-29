@@ -19,6 +19,7 @@ export class AppProductGridComponent {
   Quetity = 1;
   pieceQuantity = 1;
   crateQuantity = 1;
+  private checkoutTimeout: any;
   constructor( private router: Router, private cartService: CartService, private wishlistService: WishlistService, private _snackBar: MatSnackBar){
 
   }
@@ -29,40 +30,49 @@ export class AppProductGridComponent {
 
    
   quantities = new Map<string, { piece: number, crate: number, message: boolean }>();
-
-onAddQuantity(productId: string, itemType: string, instock: number) {
-  let quantity = this.quantities.get(productId) || { piece: 1, crate: 1, message: false };
-  if (itemType === 'piece' && quantity.piece < instock) {
-    quantity.piece++;
-    quantity.message = false; 
-  } else if (itemType === 'crate' && quantity.crate < instock) {
-    quantity.crate++;
-    quantity.message = false;
-  } else {
-    // Only show the message for the specific product
-    quantity.message = true;
+onAddQuantity(productId: string, itemType: string, instock: number, contents: number) {
+  let quantity = this.quantities.get(productId) || { piece: 0, crate: 1, message: false };
+  if(itemType === 'piece' && quantity.crate < 2){
+    contents = 0
+  }
+  const totalAdded = (quantity.piece * 1) + (quantity.crate * contents);
+  console.log(" totalAdded totalAdded",  totalAdded)
+  if (itemType === 'piece') {
+    if ((totalAdded + 1) <= instock) {
+      quantity.piece++;
+      quantity.message = false;
+    } else {
+      quantity.message = true; 
+    }
+  } else if (itemType === 'crate') {
+    if ((totalAdded + contents) <= instock) {
+      quantity.crate++;
+      quantity.message = false;
+    } else {
+      quantity.message = true; 
+    }
   }
   this.quantities.set(productId, quantity);
 }
 
-  
+
   onRemoveQuantity(productId: string, itemType: string) {
-    let quantity = this.quantities.get(productId);
+    let quantity = this.quantities.get(productId)
     if (!quantity) return;
   
     if (itemType === 'piece' && quantity.piece > 1) {
       quantity.piece--;
+      quantity.message = false;
     } else if (itemType === 'crate' && quantity.crate > 1) {
       quantity.crate--;
+      quantity.message = false;
     }
     this.quantities.set(productId, quantity);
   }
   
 
   onAddPieceToCart(product: Product, piecePrice: number): void {
-    console.log(' piecePrice',  piecePrice)
     let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
-    console.log('currentQuantity', currentQuantity)
     this.cartService.addToCart({
       categoryName: product.categoryName,
       title: product.title,
@@ -78,9 +88,13 @@ onAddQuantity(productId: string, itemType: string, instock: number) {
     });
     this.quantities.set(product.productId, { 
       ...currentQuantity,
-      piece: currentQuantity.piece, // Increment the piece quantity.
-      message: currentQuantity.piece >= product.piece // Set the message flag based on the stock.
+      piece: currentQuantity.piece,
+      message: currentQuantity.piece >= product.piece
     });
+    clearTimeout(this.checkoutTimeout);
+    this.checkoutTimeout = setTimeout(() => {
+      this.cartService.triggerCheckout(); // Automatically trigger checkout after 15 minutes
+    }, 900000); // 15 minutes in milliseconds
 }
 
 onAddCrateToCart(product: Product, cratePrice: number): void {
@@ -101,8 +115,8 @@ onAddCrateToCart(product: Product, cratePrice: number): void {
     });
     this.quantities.set(product.productId, { 
       ...currentQuantity,
-      crate: currentQuantity.crate, // Increment the piece quantity.
-      message: currentQuantity.crate >= product.piece // Set the message flag based on the stock.
+      crate: currentQuantity.crate, 
+      message: currentQuantity.crate >= product.piece 
     });
 }
 

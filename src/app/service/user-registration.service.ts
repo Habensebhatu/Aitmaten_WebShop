@@ -20,7 +20,7 @@ export class UserRegistrationService {
   }
  
   AddUser(user : UserRegistration): Observable<UserRegistration>{
-    console.log("user", user)
+    console.log("user", user.userId)
     return this.httpClient.post<UserRegistration>(this.apiUrl, user);
   }
 

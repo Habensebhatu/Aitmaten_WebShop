@@ -12,7 +12,7 @@ import { WishlistService } from 'src/app/service/wishlist.service';
 export class HeaderAreaComponent {
   @Input() itemsQuantity: number = 0;
   @Input() cart: any;
-  log = 'sofani.png';
+  log = 'logeaitmaten.png';
   currentUser: UserRegistration | null = null;
   wishlistQuantity = 0; 
   private _cart: CartI = { items: [] };
