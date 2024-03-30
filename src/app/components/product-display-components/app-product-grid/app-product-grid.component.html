@@ -6,14 +6,14 @@
           <article class="wish-product relative shadow-lg transition-all duration-300">
             <!-- Product Image -->
             <div class="product-image relative">
-              <a>
+              <a [routerLink]="['/product', product.productId]">
                 <img [src]="product.imageUrls[0].file" class="w-full h-64 object-cover" />
               </a>
-              <!-- Overlay Text for Aanbieding or similar highlight -->
-              <div class="absolute top-0 left-0 bg-[#4CAF50]  text-white p-2">
+              <div class="absolute top-0 left-0 bg-[#4CAF50] text-white p-2">
                 Aanbieding
               </div>
             </div>
+            
           
             <!-- Product Details -->
             <div class="product-caption mt-4 cursor-pointer p-4">

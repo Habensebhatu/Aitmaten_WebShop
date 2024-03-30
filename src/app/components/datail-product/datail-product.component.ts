@@ -27,6 +27,7 @@ export class DatailProductComponent {
   hovered = false;
   currentPage: number = 1;
   pageSize: number = 10;
+  private checkoutTimeout: any;
   constructor(
     private route: ActivatedRoute,
     private storeService: StoreService,
@@ -72,17 +73,113 @@ export class DatailProductComponent {
   displayedRelatedProducts: string[] = [];
 currentIndex = 0;
 
-    onRemoveQuantity(){
-    if(this.Quetity > 1){
-       this.Quetity--;
+  //   onRemoveQuantity(){
+  //   if(this.Quetity > 1){
+  //      this.Quetity--;
+  //   }
+  //   else(
+  //     this.Quetity
+  //   )
+  // }
+
+  // onAddQuantity(){
+  //  this.Quetity++;
+  // }
+  quantities = new Map<string, { piece: number, crate: number, message: boolean }>();
+  onAddQuantity(productId: string, itemType: string, instock: number, contents: number) {
+    let quantity = this.quantities.get(productId) || { piece: 0, crate: 1, message: false };
+    if(itemType === 'piece' && quantity.crate < 2){
+      contents = 0
     }
-    else(
-      this.Quetity
-    )
+    const totalAdded = (quantity.piece * 1) + (quantity.crate * contents);
+    console.log(" totalAdded totalAdded",  totalAdded)
+    if (itemType === 'piece') {
+      if ((totalAdded + 1) <= instock) {
+        quantity.piece++;
+        quantity.message = false;
+      } else {
+        quantity.message = true; 
+      }
+    } else if (itemType === 'crate') {
+      if ((totalAdded + contents) <= instock) {
+        quantity.crate++;
+        quantity.message = false;
+      } else {
+        quantity.message = true; 
+      }
+    }
+    this.quantities.set(productId, quantity);
+  }
+  
+  
+    onRemoveQuantity(productId: string, itemType: string) {
+      let quantity = this.quantities.get(productId)
+      if (!quantity) return;
+    
+      if (itemType === 'piece' && quantity.piece > 1) {
+        quantity.piece--;
+        quantity.message = false;
+      } else if (itemType === 'crate' && quantity.crate > 1) {
+        quantity.crate--;
+        quantity.message = false;
+      }
+      this.quantities.set(productId, quantity);
+    }
+
+    onAddPieceToCart(product: Product, piecePrice: number): void {
+      let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
+      this.cartService.addToCartFromProductDetail({
+        categoryName: product.categoryName,
+        title: product.title,
+        price: piecePrice,
+        quantity: currentQuantity.piece,
+        imageUrl: product.imageUrls[0].file,
+        productId: product.productId,
+        categoryId: product.categoryId,
+        description: product.description,
+        sessionId : product.sessionId,
+        kilo :1,
+        cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
+      });
+      this.quantities.set(product.productId, { 
+        ...currentQuantity,
+        piece: currentQuantity.piece,
+        message: currentQuantity.piece >= product.piece
+      });
+      clearTimeout(this.checkoutTimeout);
+      this.checkoutTimeout = setTimeout(() => {
+        this.cartService.triggerCheckout(); // Automatically trigger checkout after 15 minutes
+      }, 900000); // 15 minutes in milliseconds
+      this.router.navigate(['/cart']);
+      this.cartService.show();
   }
 
-  onAddQuantity(){
-   this.Quetity++;
+  onAddCrateToCart(product: Product, cratePrice: number): void {
+    let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
+    const tottalcrateQuantity =  currentQuantity.crate * product.crate
+      this.cartService.addToCart({
+        categoryName: product.categoryName,
+        title: product.title,
+        price: cratePrice,
+        quantity: tottalcrateQuantity, 
+        imageUrl: product.imageUrls[0].file,
+        productId: product.productId,
+        categoryId: product.categoryId,
+        description: product.description,
+        sessionId : product.sessionId,
+        kilo :product.crate,
+        cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
+      });
+      this.quantities.set(product.productId, { 
+        ...currentQuantity,
+        crate: currentQuantity.crate, 
+        message: currentQuantity.crate >= product.piece 
+      });
+  
+      clearTimeout(this.checkoutTimeout);
+      this.checkoutTimeout = setTimeout(() => {
+        this.cartService.triggerCheckout(); // Automatically trigger checkout after 15 minutes
+      }, 900000); // 15 minutes in milliseconds
   }
 
   onAddToCart(): void {

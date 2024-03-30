@@ -118,6 +118,11 @@ onAddCrateToCart(product: Product, cratePrice: number): void {
       crate: currentQuantity.crate, 
       message: currentQuantity.crate >= product.piece 
     });
+
+    clearTimeout(this.checkoutTimeout);
+    this.checkoutTimeout = setTimeout(() => {
+      this.cartService.triggerCheckout(); // Automatically trigger checkout after 15 minutes
+    }, 900000); // 15 minutes in milliseconds
 }
 
 

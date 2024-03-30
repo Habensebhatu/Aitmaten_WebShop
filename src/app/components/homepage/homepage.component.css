@@ -75,7 +75,7 @@ body #primary_slider .swiper-slide {
   transform: translateX(-50%); /* Centers the pseudo-element */
   width: 50px;
   height: 7px;
-  background: url("/assets/image/title.png");
+  /* background: url("/assets/image/title.png"); */
 }
 
 @media only screen and (max-width: 575px) {

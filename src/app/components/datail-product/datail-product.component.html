@@ -15,28 +15,44 @@
       <h1 style="color: #0d134e" class="fw-bold">{{ product?.title }}</h1>
     </div>
     <div class="mt-0">
-      <p class="text-red-500 font-bold text-xl">
+      <p class="text-[#4CAF50] font-bold text-xl">
         {{ product?.piecePrice| currency : "EUR" : "symbol" : "1.2-2" }}
       </p>
     </div>
-    <div class="flex items-center border rounded-full w-32" style="border-color: #0d134e">
-      <button mat-icon-button (click)="onRemoveQuantity()">
-        <mat-icon>remove</mat-icon>
-      </button>
-      <span class="mx-2">{{ Quetity }}</span>
-      <button mat-icon-button (click)="onAddQuantity()">
-        <mat-icon>add</mat-icon>
+    <div class="flex items-center mt-4">
+      <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10 mr-8" style="border-color: #0d134e">
+        <button mat-icon-button (click)="onRemoveQuantity(product!.productId, 'piece')" class="px-3">
+          <mat-icon style="font-size: 16px;">remove</mat-icon>
+        </button>
+        <span class="mx-1 text-xs">{{ quantities.get(product!.productId)?.piece || 1 }}</span>
+      
+        <button mat-icon-button (click)="onAddQuantity(product!.productId, 'piece', product!.piece, product!.crate)" class="px-3">
+          <mat-icon style="font-size: 16px;" >add</mat-icon>
+        </button>
+      </div>
+      <button (click)="onAddPieceToCart(product!, product!.piecePrice)"
+      class="w-auto h-10 flex items-center justify-center px-4 bg-[#4CAF50] hover:bg-[#43A047] text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
+        €{{ product!.piecePrice }}
       </button>
     </div>
-    <mat-card-actions class="mt-5">
-      <button mat-raised-button (click)="onAddToCart()" color="warn">
-        Add To cart
-        <mat-icon style="color: #ffffff; margin-left: 5px">shopping_cart</mat-icon>
-      </button>
-    </mat-card-actions>
+    <div class="flex items-center mt-4">
+      <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10 mr-8" style="border-color: #0d134e">
+        <button mat-icon-button (click)="onRemoveQuantity(product!.productId, 'crate')" class="px-3">
+          <mat-icon style="font-size: 16px;">remove</mat-icon>
+        </button>
+        <span class="mx-1 text-xs">{{ quantities.get(product!.productId)?.crate || 1 }}</span>
+        <button mat-icon-button (click)="onAddQuantity(product!.productId, 'crate', product!.piece, product!.crate)" class="px-3">
+          <mat-icon  style="font-size: 16px;">add</mat-icon>
+        </button>
+      </div>
+      <button (click)="onAddCrateToCart(product!,product!.cratePrice)"
+      class="w-auto h-10 flex items-center justify-center px-4 bg-[#4CAF50] hover:bg-[#43A047] text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
+      €{{ product!.cratePrice }}
+    </button>
+    </div>
     <div (click)="onAddToWishlist()" class="mt-4">
       <div (click)="onAddToWishlist()" class="mt-4">
-        <span class="w-10 h-10 flex items-center justify-center rounded-full text-red-500 transition-all duration-300"
+        <span class="w-10 h-10 flex items-center justify-center rounded-full text-[#4CAF50] transition-all duration-300"
               [ngClass]="{'hover:w-10 hover:h-10': !isInWishlist()}"
               [style.background-color]="isInWishlist() ? 'transparent' : hovered ? '#FF3EB2' : 'transparent'"
               (mouseover)="hovered = true" (mouseout)="hovered = false">

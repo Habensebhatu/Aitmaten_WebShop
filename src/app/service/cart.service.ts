@@ -100,7 +100,7 @@ export class CartService {
         this.httpClient.post<ProductAddCart>(`${this.apiUrl}`, item,{ headers }).subscribe(
             response => {
                 const items = [...this.cart.value.items];
-                const itemInCart = items.find((_item) => _item.productId === item.productId);
+                const itemInCart = items.find((_item) => _item.productId === item.productId && _item.price == item.price);
                 if (itemInCart) {
                     itemInCart.quantity += item.quantity;
                 } else {
