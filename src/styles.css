@@ -17,7 +17,7 @@ body {
 }
 
 .text-danger {
-  color: #cc2121 !important;
+  color: #4CAF50 !important;
 }
 
 input:focus {
@@ -42,7 +42,7 @@ input:focus {
 }
 
 .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  background: #cc2121;
+  background: #4CAF50;
 }
 
 .navbar .mat-mdc-button {
@@ -51,7 +51,7 @@ input:focus {
 }
 
 .navbar .mat-mdc-button:hover {
-  color: #cc2121 !important;
+  color: #4CAF50 !important;
 }
 
 /* Category Product */
@@ -101,13 +101,13 @@ input:focus {
   overflow: hidden;
   line-height: 1.5;
   max-height: 1.5em;
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .product-price {
   font-size: 18px;
   font-weight: 500;
-  color: #cc2121;
+  color: #4CAF50;
 }
 
 .categories-slider-wrapper {
@@ -127,7 +127,7 @@ input:focus {
   font-size: xx-large;
   visibility: visible;
   color: #fff;
-  background: #cc2121d1;
+  background: #4CAF50;
   text-align: center;
 }
 .swiper-arrow.next {
@@ -156,7 +156,7 @@ input:focus {
 }
 
 .form-input:focus {
-  border: 1px solid #cc2121;
+  border: 1px solid #4CAF50;
 }
 
 .wish-product p {
@@ -290,7 +290,7 @@ input:focus {
 
 .loader {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #cc2121;
+  border-top: 4px solid #4CAF50;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -305,4 +305,16 @@ input:focus {
     transform: rotate(360deg);
   }
 }
+
+/* In your component.css or styles.css */
+.custom-green-button {
+  background-color: #72a873 !important; /* Custom green background */
+  color: white !important; /* White text */
+  padding: 4px 10px !important; /* Smaller padding for a smaller button */
+}
+
+.custom-green-button:hover {
+  background-color: #43a047 !important; /* Darker green on hover */
+}
+
 

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Subscription } from 'rxjs';
 import { UserRegistration } from 'src/app/Models/ UserRegistration';
+import { MailRequestModel } from 'src/app/Models/MailRequest';
 import { OrderDetail, OrderModel } from 'src/app/Models/Order';
 import {CartI,  ProductAddCart } from 'src/app/Models/product.model';
 import { CartService } from 'src/app/service/cart.service';
@@ -107,50 +108,52 @@ onRemoveFromCart(item: ProductAddCart): void {
 }
 
 
+// Inside your component
+// Inside your CartService or an appropriate service
+
+aggregateQuantities(orderDetails: OrderDetail[]): Record<string, number> {
+  return orderDetails.reduce((acc: Record<string, number>, detail) => {
+    const productId = detail.productId.toString();
+    if (acc[productId]) {
+      acc[productId] += detail.quantity;
+    } else {
+      acc[productId] = detail.quantity;
+    }
+    return acc;
+  }, {});
+}
+
+
+updateProductStock(aggregatedQuantities: {[key: string]: number}): void {
+  Object.entries(aggregatedQuantities).forEach(([productId, quantity]) => {
+    this.storeService.updateProductStock(productId, quantity).subscribe({
+      next: (updateResult) => {
+        console.log(`Stock updated for product ${productId}`);
+      },
+      error: (error) => {
+        console.error(`Failed to update stock for product ${productId}`, error);
+      }
+    });
+  });
+}
+
+// ... Other service methods ...
+
+
 onCheckout(): void {
   this.userService.currentUser.subscribe(user => {
     if (!user) return; // Early exit if user is null or undefined
     
-    // dataSource has OrderDetail
-    const orderDetails: OrderDetail[] = this.dataSource.map(item => ({
-      productId: item.productId,
-      quantity: item.quantity,
-      amountTotal: item.price * item.quantity,
-      contents: item.kilo,
-      price: item.price
-    }));
-  
-    const order: OrderModel = {
-      UserId: user.nameid, // Use the userId from the subscription
-      orderDetails: orderDetails
-    };
-   
+    const orderDetails: OrderDetail[] = this.mapDataSourceToOrderDetails(this.dataSource);
+    const order: OrderModel = this.createOrderModel(user, orderDetails);
+    
     this.cartService.addOrder(order).subscribe({
       next: (result) => {
-        // Aggregate quantities for the same productId after the order has been placed
-        const aggregatedQuantities = orderDetails.reduce((acc: {[key: string]: number}, detail) => {
-          const productId = detail.productId.toString(); // Ensure productId is a string, adjust if necessary
-          if (acc[productId]) {
-            acc[productId] += detail.quantity;
-          } else {
-            acc[productId] = detail.quantity;
-          }
-          return acc;
-        }, {});
-        
-        
-        // Now update the stock for each product based on the aggregated quantities
-        Object.entries(aggregatedQuantities).forEach(([productId, quantity]) => {
-          this.storeService.updateProductStock(productId, quantity).subscribe({
-            next: (updateResult) => {
-              console.log(`Stock updated for product ${productId}`);
-            },
-            error: (error) => {
-              console.error(`Failed to update stock for product ${productId}`, error);
-            }
-          });
-        });
-        
+        // Use the service method to aggregate quantities
+        const aggregatedQuantities = this.aggregateQuantities(orderDetails);
+        // Use the service method to update stock
+        this.updateProductStock(aggregatedQuantities);
+        this.ConfirmationReceive();
         this.router.navigate(['/payment-success']);
       },
       error: (error) => {
@@ -159,6 +162,77 @@ onCheckout(): void {
     });
   });
 }
+
+private mapDataSourceToOrderDetails(dataSource: ProductAddCart[]): OrderDetail[] {
+  return dataSource.map(item => ({
+    productId: item.productId,
+    quantity: item.quantity,
+    amountTotal: item.price * item.quantity,
+    contents: item.kilo,
+    price: item.price
+  }));
+}
+
+private createOrderModel(user: UserRegistration, orderDetails: OrderDetail[]): OrderModel {
+  return {
+    UserId: user.nameid,
+    orderDetails: orderDetails
+  };
+}
+
+
+ConfirmationReceive(): void {
+  this.userService.currentUser.subscribe(user => {
+    if (!user) {
+      console.error('User is not logged in.');
+      return;
+    }
+  
+    // Fetch user details
+    this.userService.getUserById(user.nameid).subscribe({
+      next: (userData) => {
+       console.log("userData", userData)
+        const orderItems = this.dataSource.map(item => ({
+          ProductName: item.title,
+          Quantity: item.quantity,
+          Price: item.price,
+          Total: item.quantity * item.price,
+          ImageUrl: item.imageUrl
+        }));
+  
+        const mailRequest = new MailRequestModel({
+          recipientName: `${userData.firstName} ${userData.lastName}`,
+          Email: userData.email,
+          city: userData.address?.residence,
+          adres: userData.address?.street,
+          postalCode: userData.address?.zipCode,
+          OrderDate: new Date(), 
+          OrderNummer: Date.now(), 
+          OrderItems: orderItems
+        });
+  
+        // Now call the service method to send the email
+        this.userService.sendConfirmationEmail(mailRequest).subscribe({
+          next: () => {
+            console.log('Confirmation email sent successfully.');
+          },
+          error: (error) => {
+            console.error('Failed to send confirmation email.', error);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching user details.', error);
+      }
+    });
+  });
+
+
+ 
+}
+
+// Add this method inside your onCheckout after the successful order
+
 
 ngOnDestroy() {
   if (this.checkoutSubscription) {

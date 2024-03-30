@@ -7,6 +7,37 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
             <div>
               <mat-form-field class="w-full">
+                <mat-label>Bederijfsdnaam</mat-label>
+                <input matInput formControlName="bedrijfsNaam" />
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="w-full">
+                <mat-label>KVK nummer</mat-label>
+                <input matInput formControlName="kvkNummer" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+            <mat-form-field class="w-full">
+              <mat-label>BTW</mat-label>
+              <input matInput formControlName="btw" />
+            </mat-form-field>
+            <mat-form-field class="w-full">
+              <mat-label>E-mail</mat-label>
+              <input matInput formControlName="email" />
+            </mat-form-field>
+            <div
+              *ngIf="registerForm.get('email')?.hasError('misUserName')"
+              class="text-red-500 p-2"
+            >
+              E-mail bestaat al
+            </div>
+          
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+            <div>
+              <mat-form-field class="w-full">
                 <mat-label>Voornaam</mat-label>
                 <input matInput formControlName="firstName" />
               </mat-form-field>
@@ -18,7 +49,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
             <mat-form-field class="w-full">
               <mat-label>E-mail</mat-label>
               <input matInput formControlName="email" />
@@ -33,7 +64,7 @@
               <mat-label>Phone Number</mat-label>
               <input matInput formControlName="phoneNumber" type="tel" />
             </mat-form-field>
-          </div>
+          </div> -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
             <mat-form-field class="w-full mb-3">
               <mat-label>Wachtwoord</mat-label>
@@ -58,50 +89,33 @@
               Wachtwoorden komen niet overeen.
             </div>
           </div>
-          <mat-form-field class="w-full mb-3">
-            <mat-label>Gender</mat-label>
-            <mat-select formControlName="gender">
-              <mat-option *ngFor="let gender of genders" [value]="gender.value">
-                {{ gender.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
           <div formGroupName="address">
-            <button
-              type="button"
-              class="text-red-500 mt-3 mb-4"
-              (click)="showAddress = !showAddress"
-            >
-              {{ showAddress ? "Hide" : "Show" }} Address Details
-            </button>
-            <div *ngIf="showAddress">
+            <div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                 <div>
                   <mat-form-field class="w-full">
-                    <mat-label>Straat</mat-label>
+                    <mat-label>Adres</mat-label>
                     <input matInput formControlName="street" type="text" />
                   </mat-form-field>
                 </div>
-                <div>
-                  <mat-form-field class="w-full">
-                    <mat-label>Hummer</mat-label>
-                    <input matInput formControlName="number" type="number" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                 <div>
                   <mat-form-field class="w-full">
                     <mat-label>Postcode</mat-label>
                     <input matInput formControlName="zipCode" type="text" />
                   </mat-form-field>
                 </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                 <div>
                   <mat-form-field class="w-full">
                     <mat-label>Woonplaats</mat-label>
                     <input matInput formControlName="residence" type="text" />
                   </mat-form-field>
                 </div>
+                <mat-form-field class="w-full">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="phoneNumber" type="tel" />
+                </mat-form-field>
               </div>
             </div>
           </div>

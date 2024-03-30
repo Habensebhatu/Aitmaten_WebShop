@@ -3,7 +3,12 @@
     <div class="mx-auto flex justify-between items-center">
       <!-- Sale information -->
       <div class="inline-block text-xs pt-2">
-        <p>{{ "WELCOME" | translate }}</p>
+        <div class="hidden md:flex items-center space-x-4 mr-8 mt-2">
+          <p class="text-sm"><a href="#">06 - 243 015 20</a></p>
+          <div class="border-l h-5 mx-2 mb-2"></div>
+          <p class="text-xs">{{ 'customer_service' | translate }}</p>
+        </div>
+        <!-- {{ "WELCOME" | translate }} -->
       </div>
       <!-- Currency and language selectors -->
       <div>

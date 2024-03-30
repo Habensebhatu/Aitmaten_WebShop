@@ -5,17 +5,17 @@
         <aside class="widget-container">
           <div class="widget-content">
             <div class="footer-logo mb-half">
-              <img [src]="'../../../assets/image/' + log" alt="Logo" width="54px"  height="54px"/>
+              <img [src]="'../../../assets/image/' + log" alt="Logo" width="80px"  height="80px"/>
             </div>
             <p>
-              {{"Sofani Market" | translate}}
+              {{"Aitmaten Supermarkt" | translate}}
             </p>
             <div class="footer-contact">
               <p>
-                <span> {{"Address" | translate}}</span>Nieuwe Plein 32, Arnhem
+                <span> {{"Address" | translate}}</span>Meeuwenlaan 317, Amsterdam-Noord
               </p>
-              <p><span>{{"Phone" | translate}}</span><a href="#">0031639173620</a></p>
-              <p><span>{{"Email" | translate}}</span><a href="#">sofanifilimon@gmail.com</a></p>
+              <p><span>{{"Phone" | translate}}</span><a href="#">06 - 243 015 20</a></p>
+              <p><span>{{"Email" | translate}}</span><a href="#">aitmaten2014@hotmail.com</a></p>
             </div>
           </div>
         </aside>
@@ -47,12 +47,12 @@
                         <li class="mb-2" [ngClass]="{'current-day': dayClasses['maandag']}">
                           {{"Monday" | translate}}: 09:00 - 22:00
                         </li>
-                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['dinsdag']}">{{"Tuesday" | translate}}: 09:00 - 22:00</li>
-                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['woensdag']}">{{"Wednesday" | translate}}: 09:00 - 22:00</li>
-                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['donderdag']}">{{"Thursday" | translate}}: 09:00 - 22:00</li>
-                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['vrijdag']}">{{"Friday" | translate}}: 09:00 - 22:00</li>
-                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['zaterdag']}">{{"Saturday" | translate}}: 09:00 - 22:00</li>
-                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['zondag']}">{{"Sunday" | translate}}: 09:00 - 22:00</li>
+                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['dinsdag']}">{{"Tuesday" | translate}}: 10:00 - 18:00</li>
+                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['woensdag']}">{{"Wednesday" | translate}}: 10:00 - 18:00</li>
+                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['donderdag']}">{{"Thursday" | translate}}: 10:00 - 18:00</li>
+                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['vrijdag']}">{{"Friday" | translate}}: 10:00 - 18:00</li>
+                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['zaterdag']}">{{"Saturday" | translate}}: 10:00 - 18:00</li>
+                        <li class="mb-2" [ngClass]="{'current-day': dayClasses['zondag']}">{{"Sunday" | translate}}: Gesloten</li>
                     </ul>
                 </div>
             </div>
@@ -83,7 +83,7 @@
           </div>
           <form>
             <div class="flex items-center space-x-3 mt-4">
-              <button mat-raised-button color="warn" type="submit" (click)="navigateToRegister()">
+              <button mat-raised-button class="custom-green-button" type="submit" (click)="navigateToRegister()">
                 {{"Register now" | translate}}
               </button>
             </div>            
