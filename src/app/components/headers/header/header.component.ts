@@ -130,7 +130,7 @@ export class HeaderComponent {
   set cart(cart: CartI) {
     console.log("cart.items", cart.items)
     this.itemsQuantity = cart.items
-      .map((item) => item.quantity / (item.kilo > 1 ? item.kilo : 1))
+      .map((item) => item.quantity / (item.kilo! > 1 ? item.kilo! : 1))
       .reduce((prev, curent) => prev + curent, 0);
 
       console.log("this.itemsQuantity", this.itemsQuantity)

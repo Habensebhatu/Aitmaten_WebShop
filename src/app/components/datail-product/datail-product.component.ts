@@ -144,19 +144,19 @@ currentIndex = 0;
       this.quantities.set(product.productId, { 
         ...currentQuantity,
         piece: currentQuantity.piece,
-        message: currentQuantity.piece >= product.piece
+        message: currentQuantity.piece >= product.instokeOfPiece
       });
       clearTimeout(this.checkoutTimeout);
       this.checkoutTimeout = setTimeout(() => {
         this.cartService.triggerCheckout(); // Automatically trigger checkout after 15 minutes
       }, 900000); // 15 minutes in milliseconds
-      this.router.navigate(['/cart']);
-      this.cartService.show();
+      // this.router.navigate(['/cart']);
+      // this.cartService.show();
   }
 
   onAddCrateToCart(product: Product, cratePrice: number): void {
     let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
-    const tottalcrateQuantity =  currentQuantity.crate * product.crate
+    const tottalcrateQuantity =  currentQuantity.crate * product.instokeOfCrate
       this.cartService.addToCart({
         categoryName: product.categoryName,
         title: product.title,
@@ -167,13 +167,13 @@ currentIndex = 0;
         categoryId: product.categoryId,
         description: product.description,
         sessionId : product.sessionId,
-        kilo :product.crate,
+        kilo :product.kilo,
         cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
       });
       this.quantities.set(product.productId, { 
         ...currentQuantity,
         crate: currentQuantity.crate, 
-        message: currentQuantity.crate >= product.piece 
+        message: currentQuantity.crate >= product.instokeOfPiece
       });
   
       clearTimeout(this.checkoutTimeout);

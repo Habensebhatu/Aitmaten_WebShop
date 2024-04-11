@@ -107,10 +107,11 @@ export class StoreService {
 
   // In your product.service.ts or a relevant service file
 
-  updateProductStock(productId: string, newStock: number): Observable<any> {
+  updateProductStock(productId: string, newStock: number, price: number): Observable<any> {
   console.log("productIdproductId", productId)
   console.log("newStocknewStocknewStock", newStock)
-    return this.httpClient.post(`${this.apiUrl}/UpdateProductStock`, { productId, newStock });
+  console.log("pricepricepricepriceprice", price)
+    return this.httpClient.post(`${this.apiUrl}/UpdateProductStock`, { productId, newStock, price });
   }
   
 

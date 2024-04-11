@@ -53,7 +53,6 @@ export class CartService {
             
         }
         this.httpClient.get<ProductAddCart[]>(`${this.apiUrl}?sessionId=${this.sessionId}`, { headers }).subscribe(items => {
-            console.log("itemsitems", items)
             const updatedcart = { items: items };
             this.cart.next(updatedcart);
         });
@@ -67,6 +66,7 @@ export class CartService {
         if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`)
         }
+        console.log("itemitemitemitemitem", item)
         this.httpClient.post<ProductAddCart>(`${this.apiUrl}`,item,{ headers }).subscribe(
             response => {
           
@@ -77,9 +77,6 @@ export class CartService {
                 } else {
                     items.push(item);
                 }
-                // const updatedCart = { items };
-                // console.log(" response.cartId response.cartId", response.cartId)
-                // this.cart.next(updatedCart);
                 this.loadCartFromServer();
                 this._snackBar.open('1 item added to cart.', 'Ok', { duration: 3000 });
             },
@@ -107,9 +104,6 @@ export class CartService {
                     items.push(item);
                 }
                
-                // const updatedCart = { items };
-                // console.log("updatedCart", updatedCart)
-                // this.cart.next(updatedCart);
                 this.loadCartFromServer();
                 this._snackBar.open('1 item added to cart.', 'Ok', { duration: 3000 });
             },

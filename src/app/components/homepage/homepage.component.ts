@@ -205,9 +205,13 @@ export class HomepageComponent {
       sessionId: "ddd445556",
       isPopular: true,
       piecePrice: 2,
-       cratePrice: 3,
-       crate: 33,
-       piece: 3
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
+       
     },
     {
       imageUrls: [
@@ -225,9 +229,12 @@ export class HomepageComponent {
       sessionId: "ddd445556",
       isPopular: true,
       piecePrice: 2,
-       cratePrice: 3,
-       crate: 33,
-       piece: 3
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
     },
     {
       imageUrls: [
@@ -245,9 +252,12 @@ export class HomepageComponent {
       sessionId: "ddd445556",
       isPopular: true,
       piecePrice: 2,
-       cratePrice: 3,
-       crate: 33,
-       piece: 3
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
     },
     {
       imageUrls: [
@@ -265,9 +275,12 @@ export class HomepageComponent {
       sessionId: "ddd445556",
       isPopular: true,
       piecePrice: 2,
-      cratePrice: 3,
-      crate: 33,
-      piece: 3
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
     },
    
     {
@@ -286,9 +299,12 @@ export class HomepageComponent {
       sessionId: "ddd445556",
       isPopular: true,
       piecePrice: 2,
-      cratePrice: 3,
-      crate: 33,
-      piece: 3
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
     },
 
     {
@@ -307,9 +323,12 @@ export class HomepageComponent {
       sessionId: "ddd445556",
       isPopular: true,
       piecePrice: 2,
-      cratePrice: 3,
-      crate: 33,
-      piece: 3
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
     },
    
    

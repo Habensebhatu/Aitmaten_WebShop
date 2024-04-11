@@ -42,11 +42,13 @@ ngOnInit(){
     this.cart = _cart;
     this.Products = this.cart.items;
     this.dataSource = this.cart.items
+    console.log("this.dataSource this.dataSource",  this.cart.items)
     this.calculatorShippingCost();
   })
 
   this.checkoutSubscription = this.cartService.checkoutTriggered$.subscribe(() => {
-    this.onCheckout();
+    // this.onCheckout();
+   
   });
 
 }
@@ -70,7 +72,7 @@ getTotal(items: ProductAddCart[]): number {
 }
 
 calculatorShippingCost() {
-  const totalWeight = this.Products.reduce((prev, current) => prev + (current.kilo * current.quantity), 0);
+  const totalWeight = this.Products.reduce((prev, current) => prev + (6 * current.quantity), 0);
   if (totalWeight <= 10) {
     this.shippingCost = 7.65;
   } else if (totalWeight <= 23) {
@@ -124,18 +126,17 @@ aggregateQuantities(orderDetails: OrderDetail[]): Record<string, number> {
 }
 
 
-updateProductStock(aggregatedQuantities: {[key: string]: number}): void {
-  Object.entries(aggregatedQuantities).forEach(([productId, quantity]) => {
-    this.storeService.updateProductStock(productId, quantity).subscribe({
-      next: (updateResult) => {
-        console.log(`Stock updated for product ${productId}`);
-      },
-      error: (error) => {
-        console.error(`Failed to update stock for product ${productId}`, error);
-      }
+updateProductStock(orderDetails: OrderDetail[]): void {
+  console.log("rderDetailsrderDetails", orderDetails)
+  orderDetails.forEach(detail => {
+    const price = detail.price;
+    this.storeService.updateProductStock(detail.productId, detail.quantity, detail.price).subscribe({
+      next: () => console.log(`Stock updated for product ${detail.productId}`),
+      error: (error) => console.error(`Failed to update stock for product ${detail.productId}`, error)
     });
   });
 }
+
 
 // ... Other service methods ...
 
@@ -152,7 +153,7 @@ onCheckout(): void {
         // Use the service method to aggregate quantities
         const aggregatedQuantities = this.aggregateQuantities(orderDetails);
         // Use the service method to update stock
-        this.updateProductStock(aggregatedQuantities);
+        this.updateProductStock(orderDetails);
         this.ConfirmationReceive();
         this.router.navigate(['/payment-success']);
       },
@@ -168,8 +169,8 @@ private mapDataSourceToOrderDetails(dataSource: ProductAddCart[]): OrderDetail[]
     productId: item.productId,
     quantity: item.quantity,
     amountTotal: item.price * item.quantity,
-    contents: item.kilo,
-    price: item.price
+    contents: item.kilo ?? 0,
+    price: item.price,
   }));
 }
 
