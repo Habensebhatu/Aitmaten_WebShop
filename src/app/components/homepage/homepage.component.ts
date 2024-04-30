@@ -26,12 +26,12 @@ export class HomepageComponent {
   wishlistProductIds: string[] = [];
   slides = [
     {
-      image: "../assets/image/heroimage.webp",
+      image: "../assets/image/heroimageAit.png",
       //  image: "../assets/image/store2image.jpeg"
     },
     {
       // image: "../assets/image/bgwebshop.png",
-       image: "../assets/image/heroimges.webp",
+       image: "../assets/image/heroimgesAit.png",
        animationClass: "",
        promoTitle: "",
        promoText: "",
@@ -169,7 +169,7 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/groeten.webp",
+          file: "../assets/image/groetenAit.png",
         },
       ],
       title: "Verkoop uw groente direct uit onze voorraad",
@@ -193,7 +193,7 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/fruits.webp",
+          file: "../assets/image/fruitsAit.png",
         },
       ],
       title: "Verkoop uw fruit direct uit onze voorraad",
@@ -263,7 +263,7 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/cress.webp",
+          file: "../assets/image/cressAit.png",
         },
       ],
       title: "Verkoop uw Knoflook direct uit onze voorraad",
@@ -287,7 +287,7 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/Kruiden.webp",
+          file: "../assets/image/KruidenAit.png",
         },
       ],
       title: "Verkoop uw Knoflook direct uit onze voorraad",
