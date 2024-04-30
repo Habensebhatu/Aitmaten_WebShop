@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Product } from 'src/app/Models/product.model';
 import { CartService } from 'src/app/service/cart.service';
-import { WishlistService } from 'src/app/service/wishlist.service';
 
 @Component({
   selector: 'app-app-product-list',
@@ -16,13 +15,15 @@ export class AppProductListComponent {
   wishlistProductIds: string[] = [];
   private unsubscribe$ = new Subject<void>();
   Quetity = 1;
-  constructor( private router: Router, private cartService: CartService, private wishlistService: WishlistService, private _snackBar: MatSnackBar){
+  constructor( private router: Router, private cartService: CartService,  private _snackBar: MatSnackBar){
 
   }
   navigateToProductDetails(productId: string): void {
     this.router.navigate(['product', productId]);
   }
-
+  ngOnInit(){
+    console.log("this.productslovelovelovelove", this.products)
+  }
   onAddToCart(product: Product): void {
     this.cartService.addToCart({
       categoryName: product.categoryName,
@@ -57,19 +58,5 @@ export class AppProductListComponent {
     return this.wishlistProductIds.includes(productId);
   }
   
-  onAddToWishlist(productId: string) : void {
-    if (!this.isInWishlist(productId)) {
-      this.wishlistService.addToWishlist(productId);
-      this.wishlistProductIds.push(productId); 
-    } else {
-      this._snackBar.open('Product is already in the wishlist.', 'Ok', {duration: 3000,});    
-    }
-  }
-  fetchWishlistProductIds(): void {
-    this.wishlistService.getWishlistProducts().pipe(takeUntil(this.unsubscribe$))
-        .subscribe(products => {
-            this.wishlistProductIds = products.map(product => product.productId);
-        });
-  }
-
+  
 }

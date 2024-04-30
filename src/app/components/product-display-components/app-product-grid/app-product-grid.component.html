@@ -23,82 +23,84 @@
                 </p>
               </div>
 
-              
+
               <hr>
-             <div *ngIf="product.instokeOfCrate >= 1">
-              <div class="mt-2" *ngIf="!quantitiesCrate.get(product.productId)?.message">
-                <span class="text-blue-300">Op voorraad of inhoud:</span>
-                <span class="ml-1 text-blue-300">{{ product.instokeOfCrate}}</span>
-              </div>
+              <div *ngIf="currentUserApproved">
+                <div *ngIf="product.instokeOfCrate >= 1">
+                  <div class="mt-2" *ngIf="!quantitiesCrate.get(product.productId)?.message">
+                    <span class="text-blue-300">Op voorraad of inhoud:</span>
+                    <span class="ml-1 text-blue-300">{{ product.instokeOfCrate}}</span>
+                  </div>
 
-            
-              <div class="mt-4" *ngIf="quantitiesCrate.get(product.productId)?.message">
-                <span class="ml-1 text-red-300">Het maximum is bereikt</span>
-              </div>
 
-              <div class="mt-4">
-                <span>Fust({{product.crateQuantity}})</span>
-              </div>
-              <!-- Quantity Selector for Crate -->
-              <div class="flex flex-col sm:flex-row justify-between items-center mb-4 mt-2 ">
-                <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10"
-                  style="border-color: #0d134e">
-                  <button mat-icon-button (click)="onRemoveQuantityCrate(product.productId)" class="px-3">
-                    <mat-icon style="font-size: 18px;">remove</mat-icon>
-                  </button>
-                  <p class="mx-2">{{ quantitiesCrate.get(product.productId)?.crate || 1 }}</p>
-                  <button mat-icon-button
-                    (click)="onAddQuantityCrate(product.productId,  product.instokeOfCrate, product.crateQuantity)"
-                    class="px-3">
-                    <mat-icon style="font-size: 18px;">add</mat-icon>
-                  </button>
+                  <div class="mt-4" *ngIf="quantitiesCrate.get(product.productId)?.message">
+                    <span class="ml-1 text-red-300">Het maximum is bereikt</span>
+                  </div>
+
+                  <div class="mt-4">
+                    <span>Fust({{product.crateQuantity}})</span>
+                  </div>
+                  <!-- Quantity Selector for Crate -->
+                  <div class="flex flex-col sm:flex-row justify-between items-center mb-4 mt-2 ">
+                    <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10"
+                      style="border-color: #0d134e">
+                      <button mat-icon-button (click)="onRemoveQuantityCrate(product.productId)" class="px-3">
+                        <mat-icon style="font-size: 18px;">remove</mat-icon>
+                      </button>
+                      <p class="mx-2">{{ quantitiesCrate.get(product.productId)?.crate || 1 }}</p>
+                      <button mat-icon-button
+                        (click)="onAddQuantityCrate(product.productId,  product.instokeOfCrate, product.crateQuantity)"
+                        class="px-3">
+                        <mat-icon style="font-size: 18px;">add</mat-icon>
+                      </button>
+                    </div>
+                    <button (click)="onAddCrateToCart(product,product.cratePrice)"
+                      class="w-auto h-10 flex items-center justify-center px-4 bg-[#4CAF50] hover:bg-[#43A047] text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
+                      {{ product.cratePrice| currency : "EUR" : "symbol" : "1.2-2" }}
+                    </button>
+                  </div>
                 </div>
-                <button (click)="onAddCrateToCart(product,product.cratePrice)"
-                  class="w-auto h-10 flex items-center justify-center px-4 bg-[#4CAF50] hover:bg-[#43A047] text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
-                  {{ product.cratePrice| currency : "EUR" : "symbol" : "1.2-2" }}
-                </button>
-              </div>
-             </div>
 
-             <div *ngIf="product.instokeOfPiece >= 1"> 
-              <div class="mt-8 mb-4 " *ngIf="!quantitiesPiece.get(product.productId)?.message && !product.kilo">
-                <span class="text-blue-300">Op voorraad of stuk:</span>
-                <span class="ml-1 text-blue-300">{{ product.instokeOfPiece }}</span>
-              </div>
-              <div class="mt-8 mb-4 " *ngIf="!quantitiesPiece.get(product.productId)?.message && product.kilo">
-                <span class="text-blue-300">Op voorraad of Kilo's:</span>
-                <span class="ml-1 text-blue-300">{{ product.instokeOfPiece }}</span>
-              </div>
+                <div *ngIf="product.instokeOfPiece >= 1">
+                  <div class="mt-8 mb-4 " *ngIf="!quantitiesPiece.get(product.productId)?.message && !product.kilo">
+                    <span class="text-blue-300">Op voorraad of stuk:</span>
+                    <span class="ml-1 text-blue-300">{{ product.instokeOfPiece }}</span>
+                  </div>
+                  <div class="mt-8 mb-4 " *ngIf="!quantitiesPiece.get(product.productId)?.message && product.kilo">
+                    <span class="text-blue-300">Op voorraad of Kilo's:</span>
+                    <span class="ml-1 text-blue-300">{{ product.instokeOfPiece }}</span>
+                  </div>
 
-              <div class="mt-8" *ngIf="quantitiesPiece.get(product.productId)?.message">
-                <span class="ml-1 text-red-300">Het maximum is bereikt</span>
-              </div>
-              <p class="mt-8" *ngIf="!product.kilo">
-                <span>Stuk(1)</span>
-              </p>
-              <p class="mt-8" *ngIf="product.kilo">
-                <span>Kilo({{product.kilo}})</span>
-              </p>
-              
-              <div class="flex flex-col sm:flex-row justify-between items-center mb-4 mt-2 ">
-                <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10"
-                  style="border-color: #0d134e">
-                  <button mat-icon-button (click)="onRemoveQuantityPiece(product.productId)" class="px-3">
-                    <mat-icon style="font-size: 16px;">remove</mat-icon>
-                  </button>
-                  <span class="mx-1 text-xs">{{ quantitiesPiece.get(product.productId)?.piece || 1 }}</span>
+                  <div class="mt-8" *ngIf="quantitiesPiece.get(product.productId)?.message">
+                    <span class="ml-1 text-red-300">Het maximum is bereikt</span>
+                  </div>
+                  <p class="mt-8" *ngIf="!product.kilo">
+                    <span>Stuk(1)</span>
+                  </p>
+                  <p class="mt-8" *ngIf="product.kilo">
+                    <span>Kilo({{product.kilo}})</span>
+                  </p>
 
-                  <button mat-icon-button (click)="onAddQuantityPiece(product.productId, product.instokeOfPiece)"
-                    class="px-3">
-                    <mat-icon style="font-size: 16px;">add</mat-icon>
-                  </button>
+                  <div class="flex flex-col sm:flex-row justify-between items-center mb-4 mt-2 ">
+                    <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10"
+                      style="border-color: #0d134e">
+                      <button mat-icon-button (click)="onRemoveQuantityPiece(product.productId)" class="px-3">
+                        <mat-icon style="font-size: 16px;">remove</mat-icon>
+                      </button>
+                      <span class="mx-1 text-xs">{{ quantitiesPiece.get(product.productId)?.piece || 1 }}</span>
+
+                      <button mat-icon-button (click)="onAddQuantityPiece(product.productId, product.instokeOfPiece)"
+                        class="px-3">
+                        <mat-icon style="font-size: 16px;">add</mat-icon>
+                      </button>
+                    </div>
+                    <button (click)="onAddPieceToCart(product, product.piecePrice)"
+                      class="w-auto h-10 flex items-center justify-center px-4 bg-[#4CAF50] hover:bg-[#43A047] text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
+                      {{ product!.piecePrice | currency : "EUR" : "symbol" : "1.2-2" }}
+                    </button>
+                  </div>
                 </div>
-                <button (click)="onAddPieceToCart(product, product.piecePrice)"
-                  class="w-auto h-10 flex items-center justify-center px-4 bg-[#4CAF50] hover:bg-[#43A047] text-white rounded-full transition-colors duration-300 mt-2 sm:mt-0">
-                  {{ product!.piecePrice | currency : "EUR" : "symbol" : "1.2-2" }}
-                </button>
               </div>
-            </div>
             </div>
           </article>
 

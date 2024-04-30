@@ -5,7 +5,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { Product } from 'src/app/Models/product.model';
 import { CartService } from 'src/app/service/cart.service';
 import { StoreService } from 'src/app/service/store.service';
-import { WishlistService } from 'src/app/service/wishlist.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 
@@ -17,9 +16,9 @@ import { Meta } from '@angular/platform-browser';
 })
 export class DatailProductComponent {
   productId: string | undefined;
-  product: Product | undefined; // Assume Product is a model with properties: title, price, description, images etc.
-  relatedProducts: Product[] = []; // A list of related products.
-  selectedImage: string | undefined; // The currently selected image.
+  product: Product | undefined; 
+  relatedProducts: Product[] = []; 
+  selectedImage: string | undefined; 
   private unsubscribe$ = new Subject<void>();
   Quetity = 1;
   categoryName: string| undefined;
@@ -32,7 +31,7 @@ export class DatailProductComponent {
     private route: ActivatedRoute,
     private storeService: StoreService,
     private cartService: CartService,
-    private wishlistService: WishlistService,  private _snackBar: MatSnackBar,private router: Router,
+   private _snackBar: MatSnackBar,private router: Router,
     private metaService: Meta
   ) {}
   
@@ -46,7 +45,7 @@ export class DatailProductComponent {
         this.getProduct();
       }
     });
-  this.fetchWishlistProductIds();
+  // this.fetchWishlistProductIds();
   }
   
   getProduct() {
@@ -203,27 +202,19 @@ currentIndex = 0;
     this.cartService.show();
   }
 
-  fetchWishlistProductIds(): void {
-    this.wishlistService.getWishlistProducts().pipe(takeUntil(this.unsubscribe$))
-        .subscribe(products => {
-            this.wishlistProductIds = products.map(product => product.productId);
-        });
-  }
+  // fetchWishlistProductIds(): void {
+  //   this.wishlistService.getWishlistProducts().pipe(takeUntil(this.unsubscribe$))
+  //       .subscribe(products => {
+  //           this.wishlistProductIds = products.map(product => product.productId);
+  //       });
+  // }
   
   
   isInWishlist(): boolean {
     return this.wishlistProductIds.includes(this.productId!);
   }
   
-  onAddToWishlist() : void {
-    if (!this.isInWishlist()) {
-      this.wishlistService.addToWishlist(this.productId!);
-      this.wishlistProductIds.push(this.productId!); // Optionally update local list
-    } else {
-      this._snackBar.open('Product is already in the wishlist.', 'Ok', {duration: 3000,});
-      console.log('Product is already in the wishlist.');
-    }
-  }
+  
 
   changeProductDetails(product: Product) {
     this.product = product;

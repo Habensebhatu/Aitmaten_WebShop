@@ -3,7 +3,7 @@ import { UserRegistration } from 'src/app/Models/ UserRegistration';
 import { CartI, ProductAddCart } from 'src/app/Models/product.model';
 import { CartService } from 'src/app/service/cart.service';
 import { UserRegistrationService } from 'src/app/service/user-registration.service';
-import { WishlistService } from 'src/app/service/wishlist.service';
+
 
 @Component({
   selector: 'app-header-area',
@@ -18,14 +18,14 @@ export class HeaderAreaComponent {
   private _cart: CartI = { items: [] };
   showAccountMenu = false;
   
-  constructor(public userService: UserRegistrationService, private cartService: CartService, private wishlistService: WishlistService) {}
+  constructor(public userService: UserRegistrationService, private cartService: CartService) {}
  
 
   toggleAccountMenu() {
      this.showAccountMenu = !this.showAccountMenu;
   }
   ngOnInit(): void{
-    this.wishlistCount();
+   
     this.userService.currentUser.subscribe(user => this.currentUser = user);
   }
   
@@ -37,10 +37,6 @@ export class HeaderAreaComponent {
     return this.cartService.getTotal(items);
   }
   
-  wishlistCount(){
-    this.wishlistService.wishlistCount$.subscribe(
-      count => this.wishlistQuantity = count
-    );
-  }
+  
 
 }

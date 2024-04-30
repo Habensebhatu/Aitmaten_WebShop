@@ -60,7 +60,6 @@ export class RegisterComponent implements OnInit {
         if (success) {
           alert('Registratie gelukt');
           const decodedToken = this.userRegistrationService.decodeJWT(success.token);
-          console.log("decodedToken",decodedToken)
           this.userRegistrationService.setCurrentUser(decodedToken);
           localStorage.setItem('token', success.token);
           this.router.navigate(['/home']);

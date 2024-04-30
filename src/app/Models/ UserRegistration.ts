@@ -11,6 +11,7 @@ export class UserRegistration {
     public password: string;
     public address?: Address;
     public nameid? : string;
+    public isApproved: boolean;
     
    
 
@@ -24,6 +25,7 @@ export class UserRegistration {
         this.email = data.email;
         this.password = data.password;
         this.address = data.address;
+        this.isApproved = data.isApproved;
       
 
        

@@ -5,7 +5,6 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Observable, Subject, of, takeUntil } from "rxjs";
 import { Product } from "src/app/Models/product.model";
 import { StoreService } from "src/app/service/store.service";
-import { WishlistService } from "src/app/service/wishlist.service";
 import Swiper from "swiper";
 
 @Component({
@@ -16,7 +15,6 @@ import Swiper from "swiper";
 export class HomepageComponent {
   constructor(
     private storeService: StoreService,
-    private wishlistService: WishlistService,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute, 
     private router: Router,
@@ -70,7 +68,7 @@ export class HomepageComponent {
     ]);
     
     this.getProducts();
-    this.fetchWishlistProductIds();
+    
 
     setTimeout(() => {
       this.loading = false; // Set to false when loading is complete
@@ -84,29 +82,7 @@ export class HomepageComponent {
         this.trendingProducts = data;
       });
   }
-  fetchWishlistProductIds(): void {
-    this.wishlistService
-      .getWishlistProducts()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((products) => {
-        this.wishlistProductIds = products.map((product) => product.productId);
-      });
-  }
-
-  isInWishlist(productId: string): boolean {
-    return this.wishlistProductIds.includes(productId);
-  }
-
-  onAddToWishlist(productId: string): void {
-    if (!this.isInWishlist(productId)) {
-      this.wishlistService.addToWishlist(productId);
-      this.wishlistProductIds.push(productId);
-    } else {
-      this._snackBar.open("Product is already in the wishlist.", "Ok", {
-        duration: 3000,
-      });
-    }
-  }
+ 
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -337,12 +313,3 @@ export class HomepageComponent {
 
  
 }
-// this.router.events.subscribe(event => {
-    //   if (event instanceof NavigationEnd) {
-    //     const fragment = this.route.snapshot.fragment;
-    //     if (fragment) {
-    //       const element = document.querySelector('#' + fragment);
-    //       if (element) element.scrollIntoView();
-    //     }
-    //   }
-    // });

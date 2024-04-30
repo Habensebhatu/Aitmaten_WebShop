@@ -27,13 +27,12 @@ export class FooterComponent {
   
   onFooterLinkClick(fragment: string): void {
     this.router.navigate(['/home'], { fragment: fragment }).then(() => {
-      // Delay the scroll action to ensure the page has rendered
       setTimeout(() => {
         const element = document.querySelector("#" + fragment);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100); // A delay of 100ms. Adjust if necessary.
+      }, 100); 
     });
   }
 

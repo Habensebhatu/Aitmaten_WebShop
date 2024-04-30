@@ -122,7 +122,7 @@ export class ShopComponent {
           this.selectedPrice == null
         ) {
           this.products = data;
-          console.log("this.products", this.products[0].categoryId);
+          console.log("this.products", this.products);
         }
       });
   }

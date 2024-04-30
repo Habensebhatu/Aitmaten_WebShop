@@ -7,7 +7,7 @@ import { CartService } from "src/app/service/cart.service";
 import { StoreService } from "src/app/service/store.service";
 import { Router, NavigationEnd } from "@angular/router";
 import { UserRegistrationService } from "src/app/service/user-registration.service";
-import { WishlistService } from "src/app/service/wishlist.service";
+
 
 @Component({
   selector: "app-header",
@@ -38,7 +38,7 @@ export class HeaderComponent {
     private storeService: StoreService,
     private router: Router,
     public userService: UserRegistrationService,
-    private wishlistService: WishlistService
+    
   ) {}
 
   ngOnInit(): void {
@@ -70,12 +70,12 @@ export class HeaderComponent {
   }
 
   fetchWishlistProductIds(): void {
-    this.wishlistService
-      .getWishlistProducts()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((products) => {
-        this.wishlistService.setWishlistCount(products.length);
-      });
+    // this.wishlistService
+    //   .getWishlistProducts()
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe((products) => {
+    //     this.wishlistService.setWishlistCount(products.length);
+    //   });
   }
   clearInput() {
     const inputElement = document.querySelector(

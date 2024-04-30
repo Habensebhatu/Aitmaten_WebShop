@@ -11,13 +11,7 @@
 
   <!-- Contact Number, Shopping Cart, and Registration/Login -->
   <div class="flex items-center">
-    <!-- Contact Number -->
-    <!-- <div class="hidden md:flex items-center space-x-4 mr-8 mt-2">
-      <p class="text-sm"><a href="#">06 - 243 015 20</a></p>
-      <div class="border-l h-5 mx-2 mb-2"></div>
-      <p class="text-xs">{{ 'customer_service' | translate }}</p>
-    </div> -->
-
+   
     <!-- Shopping Cart -->
     <div class="flex items-center space-x-1">
       <div
@@ -46,14 +40,14 @@
           <button mat-menu-item routerLink="/login">Login</button>
         </mat-menu>
       </ng-template>
-      <button mat-icon-button routerLink="/wishlist">
+      <!-- <button mat-icon-button routerLink="/wishlist">
         <mat-icon
           [matBadge]="wishlistQuantity"
           [matBadgeHidden]="!wishlistQuantity"
           matBadgeColor="warn"
           >favorite_border</mat-icon
         >
-      </button>
+      </button> -->
       <div class="mt-2">
         <button routerLink="cart">
           <mat-icon

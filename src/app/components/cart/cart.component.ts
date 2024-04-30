@@ -110,9 +110,6 @@ onRemoveFromCart(item: ProductAddCart): void {
 }
 
 
-// Inside your component
-// Inside your CartService or an appropriate service
-
 aggregateQuantities(orderDetails: OrderDetail[]): Record<string, number> {
   return orderDetails.reduce((acc: Record<string, number>, detail) => {
     const productId = detail.productId.toString();
@@ -127,7 +124,6 @@ aggregateQuantities(orderDetails: OrderDetail[]): Record<string, number> {
 
 
 updateProductStock(orderDetails: OrderDetail[]): void {
-  console.log("rderDetailsrderDetails", orderDetails)
   orderDetails.forEach(detail => {
     const price = detail.price;
     this.storeService.updateProductStock(detail.productId, detail.quantity, detail.price).subscribe({
@@ -137,22 +133,16 @@ updateProductStock(orderDetails: OrderDetail[]): void {
   });
 }
 
-
-// ... Other service methods ...
-
-
 onCheckout(): void {
   this.userService.currentUser.subscribe(user => {
-    if (!user) return; // Early exit if user is null or undefined
+    if (!user) return; 
     
     const orderDetails: OrderDetail[] = this.mapDataSourceToOrderDetails(this.dataSource);
     const order: OrderModel = this.createOrderModel(user, orderDetails);
     
     this.cartService.addOrder(order).subscribe({
       next: (result) => {
-        // Use the service method to aggregate quantities
         const aggregatedQuantities = this.aggregateQuantities(orderDetails);
-        // Use the service method to update stock
         this.updateProductStock(orderDetails);
         this.ConfirmationReceive();
         this.router.navigate(['/payment-success']);
@@ -189,7 +179,6 @@ ConfirmationReceive(): void {
       return;
     }
   
-    // Fetch user details
     this.userService.getUserById(user.nameid).subscribe({
       next: (userData) => {
        console.log("userData", userData)
@@ -212,7 +201,6 @@ ConfirmationReceive(): void {
           OrderItems: orderItems
         });
   
-        // Now call the service method to send the email
         this.userService.sendConfirmationEmail(mailRequest).subscribe({
           next: () => {
             console.log('Confirmation email sent successfully.');
@@ -231,9 +219,6 @@ ConfirmationReceive(): void {
 
  
 }
-
-// Add this method inside your onCheckout after the successful order
-
 
 ngOnDestroy() {
   if (this.checkoutSubscription) {

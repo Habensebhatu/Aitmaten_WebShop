@@ -1,9 +1,8 @@
-export interface Category{
-    categoryId: string;
-       name: string;
-      quantityProduct : number;
+export interface Category {
+  categoryId: string;
+  name: string;
+  quantityProduct: number;
   count: number;
   selected?: boolean;
-     
-   
+  
 }
