@@ -5,9 +5,11 @@ import { CartService } from 'src/app/service/cart.service';
 import { UserRegistrationService } from 'src/app/service/user-registration.service';
 
 
+
 @Component({
   selector: 'app-header-area',
-  templateUrl: './header-area.component.html'
+  templateUrl: './header-area.component.html',
+  styleUrls: ["./header-area.component.css"]
 })
 export class HeaderAreaComponent {
   @Input() itemsQuantity: number = 0;

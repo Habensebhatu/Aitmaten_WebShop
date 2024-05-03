@@ -40,20 +40,13 @@
           <button mat-menu-item routerLink="/login">Login</button>
         </mat-menu>
       </ng-template>
-      <!-- <button mat-icon-button routerLink="/wishlist">
-        <mat-icon
-          [matBadge]="wishlistQuantity"
-          [matBadgeHidden]="!wishlistQuantity"
-          matBadgeColor="warn"
-          >favorite_border</mat-icon
-        >
-      </button> -->
       <div class="mt-2">
         <button routerLink="cart">
           <mat-icon
             [matBadge]="itemsQuantity"
             [matBadgeHidden]="!itemsQuantity"
             matBadgeColor="warn"
+            class="custom-badge-color"
             >shopping_cart</mat-icon
           >
         </button>

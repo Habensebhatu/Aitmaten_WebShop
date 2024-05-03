@@ -27,13 +27,10 @@
               <mat-label>E-mail</mat-label>
               <input matInput formControlName="email" />
             </mat-form-field>
-            <div
-              *ngIf="registerForm.get('email')?.hasError('misUserName')"
-              class="text-red-500 p-2"
-            >
+            <div *ngIf="registerForm.get('email')?.hasError('misUserName')" class="text-red-500 p-2">
               E-mail bestaat al
             </div>
-          
+
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
             <div>
@@ -49,22 +46,6 @@
               </mat-form-field>
             </div>
           </div>
-          <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-            <mat-form-field class="w-full">
-              <mat-label>E-mail</mat-label>
-              <input matInput formControlName="email" />
-            </mat-form-field>
-            <div
-              *ngIf="registerForm.get('email')?.hasError('misUserName')"
-              class="text-red-500 p-2"
-            >
-              E-mail bestaat al
-            </div>
-            <mat-form-field class="w-full">
-              <mat-label>Phone Number</mat-label>
-              <input matInput formControlName="phoneNumber" type="tel" />
-            </mat-form-field>
-          </div> -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
             <mat-form-field class="w-full mb-3">
               <mat-label>Wachtwoord</mat-label>
@@ -73,19 +54,12 @@
 
             <mat-form-field class="w-full mb-3">
               <mat-label>Bevestig wachtwoord</mat-label>
-              <input
-                matInput
-                type="password"
-                formControlName="confirmPassword"
-              />
+              <input matInput type="password" formControlName="confirmPassword" />
             </mat-form-field>
-            <div
-              *ngIf="
+            <div *ngIf="
                 registerForm.get('confirmPassword')?.hasError('mismatch') &&
                 registerForm.get('confirmPassword')?.touched
-              "
-              class="text-red-500 p-2"
-            >
+              " class="text-red-500 p-2">
               Wachtwoorden komen niet overeen.
             </div>
           </div>
@@ -119,18 +93,22 @@
               </div>
             </div>
           </div>
-          <button
+          <!-- <button
             mat-raised-button
             color="warn"
             class="w-full mt-4"
             type="submit"
           >
             Registreren
+          </button> -->
+
+          <button class="mt-4 bg-[#4CAF50] text-white py-2 px-2 text-sm rounded hover:bg-[#4CAF50] w-full mt-4"   type="submit">
+            Registreren
           </button>
           <div class="border-t my-4"></div>
           <p class="text-sm pb-lg-2">
             Heb je al een account?
-            <a routerLink="/login" class="text-red-600">Log hier in!</a>
+            <a routerLink="/login" class="text-[#43a047]">Log hier in!</a>
           </p>
         </form>
       </div>

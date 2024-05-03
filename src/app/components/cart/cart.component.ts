@@ -36,23 +36,61 @@ export class CartComponent{
  
   dataSource: Array<ProductAddCart> = [];
  checkoutSubscription: Subscription | undefined;
+ timeSubscription: Subscription | undefined;
+ cancelTime: string | undefined;
 constructor(private cartService: CartService, private http: HttpClient, private storeService: StoreService, private userService: UserRegistrationService, private router: Router){}
 ngOnInit(){
   this.cartService.cart.subscribe((_cart: CartI)=>{
     this.cart = _cart;
     this.Products = this.cart.items;
     this.dataSource = this.cart.items
-    console.log("this.dataSource this.dataSource",  this.cart.items)
-    this.calculatorShippingCost();
+    this.calculateCancelUntil();
+
   })
 
   this.checkoutSubscription = this.cartService.checkoutTriggered$.subscribe(() => {
-    // this.onCheckout();
+    this.onCheckout();
    
   });
-
 }
 
+calculateCancelUntil() {
+  let cancelTime = new Date();
+  cancelTime.setMinutes(cancelTime.getMinutes() + 15);  // Add 15 minutes to the added time
+ const cancelTimeTosting = cancelTime.toLocaleString('en-NL', {
+    hour: 'numeric',
+    minute: 'numeric',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric'
+});
+this.cancelTime = cancelTimeTosting
+}
+
+
+
+
+
+onCheckout(): void {
+  this.userService.currentUser.subscribe(user => {
+    if (!user) return; 
+    
+    const orderDetails: OrderDetail[] = this.mapDataSourceToOrderDetails(this.dataSource);
+    const order: OrderModel = this.createOrderModel(user, orderDetails);
+    
+    this.cartService.addOrder(order).subscribe({
+      next: (result) => {
+        const aggregatedQuantities = this.aggregateQuantities(orderDetails);
+        this.updateProductStock(orderDetails);
+        this.ConfirmationReceive();
+        this.router.navigate(['/payment-success']);
+      },
+      error: (error) => {
+        console.error(`Failed to place order`, error);
+      }
+    });
+  });
+}
 
 
 getLastProductCategory() {
@@ -70,23 +108,6 @@ getTotal(items: ProductAddCart[]): number {
   return this.cartService.getTotal(items);
   
 }
-
-calculatorShippingCost() {
-  const totalWeight = this.Products.reduce((prev, current) => prev + (6 * current.quantity), 0);
-  if (totalWeight <= 10) {
-    this.shippingCost = 7.65;
-  } else if (totalWeight <= 23) {
-    this.shippingCost = 13.90;
-  } else if (totalWeight <= 33) {
-    this.shippingCost = 21,55;
-  } 
- 
-  else {
-    this.shippingCost = 27,80;
-  }
-  
-}
-
 
 getProducts(){
   this.storeService.setAllProducts(true);
@@ -133,26 +154,7 @@ updateProductStock(orderDetails: OrderDetail[]): void {
   });
 }
 
-onCheckout(): void {
-  this.userService.currentUser.subscribe(user => {
-    if (!user) return; 
-    
-    const orderDetails: OrderDetail[] = this.mapDataSourceToOrderDetails(this.dataSource);
-    const order: OrderModel = this.createOrderModel(user, orderDetails);
-    
-    this.cartService.addOrder(order).subscribe({
-      next: (result) => {
-        const aggregatedQuantities = this.aggregateQuantities(orderDetails);
-        this.updateProductStock(orderDetails);
-        this.ConfirmationReceive();
-        this.router.navigate(['/payment-success']);
-      },
-      error: (error) => {
-        console.error(`Failed to place order`, error);
-      }
-    });
-  });
-}
+
 
 private mapDataSourceToOrderDetails(dataSource: ProductAddCart[]): OrderDetail[] {
   return dataSource.map(item => ({
@@ -175,13 +177,11 @@ private createOrderModel(user: UserRegistration, orderDetails: OrderDetail[]): O
 ConfirmationReceive(): void {
   this.userService.currentUser.subscribe(user => {
     if (!user) {
-      console.error('User is not logged in.');
       return;
     }
   
     this.userService.getUserById(user.nameid).subscribe({
       next: (userData) => {
-       console.log("userData", userData)
         const orderItems = this.dataSource.map(item => ({
           ProductName: item.title,
           Quantity: item.quantity,
@@ -224,8 +224,10 @@ ngOnDestroy() {
   if (this.checkoutSubscription) {
     this.checkoutSubscription.unsubscribe();
   }
+  if (this.timeSubscription) {
+    this.timeSubscription.unsubscribe();
+  }
 }
-
 }
 
 

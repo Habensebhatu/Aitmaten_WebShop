@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, takeWhile, timer } from 'rxjs';
 import { Cart, CartI, Product, ProductAddCart } from '../Models/product.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -19,6 +19,9 @@ export class CartService {
      sessionId: string ;
      private checkoutTrigger = new Subject<void>();
      checkoutTriggered$ = this.checkoutTrigger.asObservable();
+     private TimeTrigger = new Subject<void>();
+     timeTriggered$ = this.TimeTrigger.asObservable();
+  
      connectionStringName = 'Aitmaten';
 
     constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient, ) {
@@ -29,6 +32,8 @@ export class CartService {
       triggerCheckout() {
         this.checkoutTrigger.next();
       }
+
+
 
   private getSessionId(): string {
     let sessionId = localStorage.getItem('sessionId');
@@ -71,6 +76,7 @@ export class CartService {
             headers = headers.set('Authorization', `Bearer ${token}`)
         }
         console.log("item.questitity", item)
+        this.TimeTrigger.next();
         const params = new HttpParams().set('connectionString', this.connectionStringName);
         this.httpClient.post<ProductAddCart>(`${this.apiUrl}/AddCartItem`, item, { headers, params: params }).subscribe(
             response => {
@@ -84,6 +90,8 @@ export class CartService {
                 }
                 this.loadCartFromServer();
                 this._snackBar.open('1 item added to cart.', 'Ok', { duration: 3000 });
+              
+
             },
             error => {
                 console.error('Error adding product to cart', error);
@@ -125,7 +133,6 @@ export class CartService {
     }
 
     clearCart(): void {
-        console.log("testestese");
         const token = localStorage.getItem('token');
         let headers = new HttpHeaders();
         if (token) {
@@ -205,7 +212,6 @@ export class CartService {
 
 
     addOrder(order: OrderModel): Observable<OrderModel> {
-        console.log("orderorderodwr", order)
         const params = new HttpParams().set('connectionString', this.connectionStringName);
         return this.httpClient.post<OrderModel>(`${this.apiUOrder}/AddOrder`, order, {params});
       }

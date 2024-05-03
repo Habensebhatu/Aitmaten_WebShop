@@ -44,6 +44,7 @@ import { HttpClient } from '@angular/common/http';
 
 import localeNl from '@angular/common/locales/nl';
 import { registerLocaleData } from '@angular/common';
+import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
 
 // Register the Dutch locale
 registerLocaleData(localeNl);
@@ -74,6 +75,7 @@ register();
     TopBarComponent,
     HeaderAreaComponent,
     ProductsSliderComponent,
+    PaymentSuccessComponent,
   ],
   imports: [
     BrowserModule,

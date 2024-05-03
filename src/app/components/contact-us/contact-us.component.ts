@@ -28,9 +28,7 @@ export class ContactUsComponent implements OnInit {
 
   onSubmit() {
     if (this.contactForm && this.contactForm.valid) {
-      console.log("this.contactForm.value", this.contactForm.value)
       const newCustomer = new Customer(this.contactForm.value);
-       console.log("newcustomer", newCustomer)
       this.autService.addCustomer(newCustomer)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe({

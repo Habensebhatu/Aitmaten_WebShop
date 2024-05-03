@@ -14,17 +14,31 @@
     <div>
       <h1 style="color: #0d134e" class="fw-bold">{{ product?.title }}</h1>
     </div>
-    <p class="mt-8">
-      <span>Fust({{product!.instokeOfCrate}})</span>
-    </p>
+    <div *ngIf="currentUserApproved">
+    <div *ngIf="product!.instokeOfCrate >= 1">
+    <div class="mt-4" *ngIf="!quantitiesCrate.get(product!.productId)?.message">
+      <span class="text-blue-300">Op voorraad of inhoud:</span>
+      <span class="ml-1 text-blue-300">{{ product!.instokeOfCrate}}</span>
+    </div>
+
+
+    <div class="mt-4" *ngIf="quantitiesCrate.get(product!.productId)?.message">
+      <span class="ml-1 text-red-300">Het maximum is bereikt</span>
+    </div>
+    <div class="mt-4">
+      <p>
+        <span>Fust({{product?.crateQuantity}})</span>
+      </p>
+    </div>
     <div class="flex items-center mt-0">
       <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10 mr-8"
         style="border-color: #0d134e">
-        <button mat-icon-button (click)="onRemoveQuantity(product!.productId, 'crate')" class="px-3">
+        <button mat-icon-button (click)="onRemoveQuantityCrate(product!.productId)" class="px-3">
           <mat-icon style="font-size: 16px;">remove</mat-icon>
         </button>
-        <span class="mx-1 text-xs">{{ quantities.get(product!.productId)?.crate || 1 }}</span>
-        <button mat-icon-button (click)="onAddQuantity(product!.productId, 'crate', 1, 1)"
+        <span class="mx-1 text-xs">{{ quantitiesCrate.get(product!.productId)?.crate || 1 }}</span>
+        <button mat-icon-button
+          (click)="onAddQuantityCrate(product!.productId,  product!.instokeOfCrate, product!.crateQuantity)"
           class="px-3">
           <mat-icon style="font-size: 16px;">add</mat-icon>
         </button>
@@ -34,21 +48,36 @@
         {{ product!.cratePrice| currency : "EUR" : "symbol" : "1.2-2" }}
       </button>
     </div>
+  </div>
 
-    <div class="mt-8">
-
-      <span>Stuk(1)</span>
+  <div *ngIf="product!.instokeOfPiece >= 1">
+    <div class="mt-8 mb-4 " *ngIf="!quantitiesPiece.get(product!.productId)?.message && !product!.kilo">
+      <span class="text-blue-300">Op voorraad of stuk:</span>
+      <span class="ml-1 text-blue-300">{{ product!.instokeOfPiece }}</span>
     </div>
+    <div class="mt-8 mb-4 " *ngIf="!quantitiesPiece.get(product!.productId)?.message && product!.kilo">
+      <span class="text-blue-300">Op voorraad of Kilo's:</span>
+      <span class="ml-1 text-blue-300">{{ product!.instokeOfPiece }}</span>
+    </div>
+
+    <div class="mt-8" *ngIf="quantitiesPiece.get(product!.productId)?.message">
+      <span class="ml-1 text-red-300">Het maximum is bereikt</span>
+    </div>
+    <p class="mt-8" *ngIf="!product!.kilo">
+      <span>Stuk(1)</span>
+    </p>
+    <p class="mt-8" *ngIf="product!.kilo">
+      <span>Kilo({{product!.kilo}})</span>
+    </p>
     <div class="flex items-center mt-4">
       <div class="product-quantity-selector flex items-center border rounded-full mb-2 sm:mb-0 h-10 mr-8"
         style="border-color: #0d134e">
-        <button mat-icon-button (click)="onRemoveQuantity(product!.productId, 'piece')" class="px-3">
+        <button mat-icon-button (click)="onRemoveQuantityPiece(product!.productId)" class="px-3">
           <mat-icon style="font-size: 16px;">remove</mat-icon>
         </button>
-        <span class="mx-1 text-xs">{{ quantities.get(product!.productId)?.piece || 1 }}</span>
+        <span class="mx-1 text-xs">{{ quantitiesPiece.get(product!.productId)?.piece || 1 }}</span>
 
-        <button mat-icon-button (click)="onAddQuantity(product!.productId, 'piece', 1,  2)"
-          class="px-3">
+        <button mat-icon-button  (click)="onAddQuantityPiece(product!.productId, product!.instokeOfPiece)" class="px-3">
           <mat-icon style="font-size: 16px;">add</mat-icon>
         </button>
       </div>
@@ -57,25 +86,8 @@
         {{ product!.piecePrice | currency : "EUR" : "symbol" : "1.2-2" }}
       </button>
     </div>
-    <!-- <div (click)="onAddToWishlist()" class="mt-4">
-      <div (click)="onAddToWishlist()" class="mt-4">
-        <span class="w-10 h-10 flex items-center justify-center rounded-full text-[#4CAF50] transition-all duration-300"
-          [ngClass]="{'hover:w-10 hover:h-10': !isInWishlist()}"
-          [style.background-color]="isInWishlist() ? 'transparent' : hovered ? '#FF3EB2' : 'transparent'"
-          (mouseover)="hovered = true" (mouseout)="hovered = false">
-          <mat-icon *ngIf="!isInWishlist()" aria-hidden="false" class="icon-style">favorite_border</mat-icon>
-          <mat-icon *ngIf="isInWishlist()" aria-hidden="false" class="icon-style"
-            style="color: rgb(241, 97, 97)">favorite</mat-icon>
-
-        </span>
-      </div>
-
-    </div> -->
-
-    <!-- <div class="mt-4">
-      <p class="text-xl" *ngIf="product?.kilo">{{ product?.kilo }} : Kilos</p>
-      <p class="text-xl ">Categories: {{ product?.categoryName }}</p>
-    </div> -->
+   </div>
+   </div>
     <!-- Share feature start -->
     <div class="flex items-center mt-4">
       <div class="flex-none mr-2 text-lg">Share</div>
@@ -118,3 +130,24 @@
       (productClicked)="changeProductDetails($event)"></app-products-slider>
   </div>
 </div>
+
+
+<!-- <div (click)="onAddToWishlist()" class="mt-4">
+      <div (click)="onAddToWishlist()" class="mt-4">
+        <span class="w-10 h-10 flex items-center justify-center rounded-full text-[#4CAF50] transition-all duration-300"
+          [ngClass]="{'hover:w-10 hover:h-10': !isInWishlist()}"
+          [style.background-color]="isInWishlist() ? 'transparent' : hovered ? '#FF3EB2' : 'transparent'"
+          (mouseover)="hovered = true" (mouseout)="hovered = false">
+          <mat-icon *ngIf="!isInWishlist()" aria-hidden="false" class="icon-style">favorite_border</mat-icon>
+          <mat-icon *ngIf="isInWishlist()" aria-hidden="false" class="icon-style"
+            style="color: rgb(241, 97, 97)">favorite</mat-icon>
+
+        </span>
+      </div>
+
+    </div> -->
+
+<!-- <div class="mt-4">
+      <p class="text-xl" *ngIf="product?.kilo">{{ product?.kilo }} : Kilos</p>
+      <p class="text-xl ">Categories: {{ product?.categoryName }}</p>
+    </div> -->

@@ -28,10 +28,13 @@
               <th mat-header-cell *matHeaderCellDef>PRODUCT</th>
               <td mat-cell *matCellDef="let element">
                   <mat-icon *ngIf="element.isPopular" class="text-yellow-500 mr-2">star</mat-icon>
-                  <span class="truncate max-w-xs block">{{ element.title }} Cancel until  15 minute after added product </span>
+                  <span class="truncate max-w-xs block">{{ element.title }}</span>
+                  <span class="text-xs block mt-2"> Te annuleren tot  {{ cancelTime }}</span>
               </td>
               <td mat-footer-cell *matFooterCellDef></td>
           </ng-container>
+          
+          
           
             <ng-container matColumnDef="AANTAL">
                 <th mat-header-cell *matHeaderCellDef>AANTAL	</th>

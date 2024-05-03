@@ -1,12 +1,13 @@
 import { Component, ViewEncapsulation  } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, of, switchMap, takeUntil } from 'rxjs';
 import { Product } from 'src/app/Models/product.model';
 import { CartService } from 'src/app/service/cart.service';
 import { StoreService } from 'src/app/service/store.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
+import { UserRegistrationService } from 'src/app/service/user-registration.service';
 
 
 @Component({
@@ -26,13 +27,17 @@ export class DatailProductComponent {
   hovered = false;
   currentPage: number = 1;
   pageSize: number = 10;
+  quantitiesCrate = new Map<string, { crate: number, message: boolean }>();
+  quantitiesPiece = new Map<string, { piece: number, message: boolean }>(); 
+  currentUserApproved: boolean = false;
   private checkoutTimeout: any;
   constructor(
     private route: ActivatedRoute,
     private storeService: StoreService,
     private cartService: CartService,
    private _snackBar: MatSnackBar,private router: Router,
-    private metaService: Meta
+    private metaService: Meta,
+    private userService: UserRegistrationService
   ) {}
   
   ngOnInit() {
@@ -45,7 +50,7 @@ export class DatailProductComponent {
         this.getProduct();
       }
     });
-  // this.fetchWishlistProductIds();
+   this.loadCurrentUser()
   }
   
   getProduct() {
@@ -68,66 +73,86 @@ export class DatailProductComponent {
         });
     }
   }
+  loadCurrentUser(): void {
+    this.userService.currentUser.pipe(
+      switchMap(user => {
+        if (!user) {
+          return of(null); 
+        }
+        return this.userService.getUserById(user.nameid);
+      })
+    ).subscribe({
+      next: (userData) => {
+        if (!userData) {
+          return;
+        }
+        this.currentUserApproved = userData.isApproved;
+      },
+      error: (error) => {
+        console.error('Error fetching user details.', error);
+      }
+    });
+  }
+
   
   displayedRelatedProducts: string[] = [];
-currentIndex = 0;
+// currentIndex = 0;
 
-  //   onRemoveQuantity(){
-  //   if(this.Quetity > 1){
-  //      this.Quetity--;
-  //   }
-  //   else(
-  //     this.Quetity
-  //   )
-  // }
+ 
+  
+    onAddQuantityCrate(productId: string, instock: number, contents: number) {
+      let quantityCrate = this.quantitiesCrate.get(productId) || {  crate: 0, message: false };
+      const totalAdded = quantityCrate.crate * contents;
+        if ((totalAdded + contents) <= instock) {
+          quantityCrate.crate++;
+          quantityCrate.message = false;
+        } else {
+          quantityCrate.message = true; 
+        }
+     
+        this.quantitiesCrate.set(productId, quantityCrate);
+    }
 
-  // onAddQuantity(){
-  //  this.Quetity++;
-  // }
-  quantities = new Map<string, { piece: number, crate: number, message: boolean }>();
-  onAddQuantity(productId: string, itemType: string, instock: number, contents: number) {
-    let quantity = this.quantities.get(productId) || { piece: 0, crate: 1, message: false };
-    if(itemType === 'piece' && quantity.crate < 2){
-      contents = 0
-    }
-    const totalAdded = (quantity.piece * 1) + (quantity.crate * contents);
-    console.log(" totalAdded totalAdded",  totalAdded)
-    if (itemType === 'piece') {
-      if ((totalAdded + 1) <= instock) {
-        quantity.piece++;
-        quantity.message = false;
-      } else {
-        quantity.message = true; 
-      }
-    } else if (itemType === 'crate') {
-      if ((totalAdded + contents) <= instock) {
-        quantity.crate++;
-        quantity.message = false;
-      } else {
-        quantity.message = true; 
-      }
-    }
-    this.quantities.set(productId, quantity);
-  }
-  
-  
-    onRemoveQuantity(productId: string, itemType: string) {
-      let quantity = this.quantities.get(productId)
+    onRemoveQuantityCrate(productId: string) {
+      let quantity = this.quantitiesCrate.get(productId)
       if (!quantity) return;
     
-      if (itemType === 'piece' && quantity.piece > 1) {
-        quantity.piece--;
-        quantity.message = false;
-      } else if (itemType === 'crate' && quantity.crate > 1) {
+      if (quantity.crate > 1) {
         quantity.crate--;
         quantity.message = false;
       }
-      this.quantities.set(productId, quantity);
+      this.quantitiesCrate.set(productId, quantity);
     }
 
+    onAddQuantityPiece(productId: string,  instock: number) {
+
+      let quantity = this.quantitiesPiece.get(productId) || { piece: 0,  message: false };
+        if ((quantity.piece + 1) <= instock) {
+          quantity.piece++;
+          console.log(" quantity.piece",  quantity.piece)
+          quantity.message = false;
+        } else {
+          quantity.message = true; 
+        }
+      this.quantitiesPiece.set(productId, quantity);
+      
+    }
+
+    onRemoveQuantityPiece(productId: string) {
+      let quantity = this.quantitiesPiece.get(productId)
+      if (!quantity) return;
+    
+      if (quantity.piece > 1) {
+        quantity.piece--;
+        quantity.message = false;
+      } 
+      this.quantitiesPiece.set(productId, quantity);
+    }
+    
+
     onAddPieceToCart(product: Product, piecePrice: number): void {
-      let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
-      this.cartService.addToCartFromProductDetail({
+      let currentQuantity = this.quantitiesPiece.get(product.productId) || { piece: 1,  message: false };
+      this.cartService.addToCart({
         categoryName: product.categoryName,
         title: product.title,
         price: piecePrice,
@@ -140,22 +165,21 @@ currentIndex = 0;
         kilo :1,
         cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
       });
-      this.quantities.set(product.productId, { 
+  
+      this.quantitiesPiece.set(product.productId, { 
         ...currentQuantity,
-        piece: currentQuantity.piece,
+        piece: 1,
         message: currentQuantity.piece >= product.instokeOfPiece
       });
       clearTimeout(this.checkoutTimeout);
       this.checkoutTimeout = setTimeout(() => {
-        this.cartService.triggerCheckout(); // Automatically trigger checkout after 15 minutes
-      }, 900000); // 15 minutes in milliseconds
-      // this.router.navigate(['/cart']);
-      // this.cartService.show();
+        this.cartService.triggerCheckout(); 
+      }, 900000); 
   }
 
   onAddCrateToCart(product: Product, cratePrice: number): void {
-    let currentQuantity = this.quantities.get(product.productId) || { piece: 1, crate: 1, message: false };
-    const tottalcrateQuantity =  currentQuantity.crate * product.instokeOfCrate
+    let currentQuantity = this.quantitiesCrate.get(product.productId) || {  crate: 1, message: false };
+    const tottalcrateQuantity =  currentQuantity.crate * product.crateQuantity
       this.cartService.addToCart({
         categoryName: product.categoryName,
         title: product.title,
@@ -166,18 +190,19 @@ currentIndex = 0;
         categoryId: product.categoryId,
         description: product.description,
         sessionId : product.sessionId,
-        kilo :product.kilo,
+        kilo :product.crateQuantity,
         cartId: "cdc1a936-c8fb-4a25-9a95-304794763b1f"
       });
-      this.quantities.set(product.productId, { 
+      this.quantitiesCrate.set(product.productId, { 
         ...currentQuantity,
-        crate: currentQuantity.crate, 
-        message: currentQuantity.crate >= product.instokeOfPiece
+        crate: 1, 
+        // crate: currentQuantity.crate, 
+        message: currentQuantity.crate >= product.instokeOfCrate 
       });
   
       clearTimeout(this.checkoutTimeout);
       this.checkoutTimeout = setTimeout(() => {
-        this.cartService.triggerCheckout(); // Automatically trigger checkout after 15 minutes
+        this.cartService.triggerCheckout(); 
       }, 900000); // 15 minutes in milliseconds
   }
 
@@ -202,14 +227,7 @@ currentIndex = 0;
     this.cartService.show();
   }
 
-  // fetchWishlistProductIds(): void {
-  //   this.wishlistService.getWishlistProducts().pipe(takeUntil(this.unsubscribe$))
-  //       .subscribe(products => {
-  //           this.wishlistProductIds = products.map(product => product.productId);
-  //       });
-  // }
-  
-  
+ 
   isInWishlist(): boolean {
     return this.wishlistProductIds.includes(this.productId!);
   }

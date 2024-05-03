@@ -9,6 +9,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { ShopComponent } from './components/product-display-components/shop/shop.component';
+import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
 
 const routes: Routes = [
   {
@@ -25,7 +26,7 @@ const routes: Routes = [
   },
   { path: "", redirectTo: "home", pathMatch: "full" },
   
-
+  { path: 'payment-success', component: PaymentSuccessComponent },
   { path: 'Register', component:  RegisterComponent},
   { path: 'login', component:   LoginComponent},
   { path: 'contactUs', component:   ContactUsComponent},

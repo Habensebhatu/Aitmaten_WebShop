@@ -216,11 +216,59 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/CHAMPIGNONS.jpeg",
+          file: "../assets/image/vlees.png",
+        },
+      ],
+      title: "100% HALAL, alles is vers geen toevoegingen",
+      categoryName: "Vlees",
+      productId: "jhjjjk",
+      categoryId: "vvvvvvv",
+      description: "hhjdfhjfjhd",
+      quantity: 3,
+      sessionId: "ddd445556",
+      isPopular: true,
+      piecePrice: 2,
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
+    },
+
+    {
+      imageUrls: [
+        {
+          index: 0,
+          file: "../assets/image/kips.png",
+        },
+      ],
+      title: "100% HALAL, alles is vers geen toevoegingen",
+      categoryName: "Kip",
+      productId: "jhjjjk",
+      categoryId: "vvvvvvv",
+      description: "hhjdfhjfjhd",
+      quantity: 3,
+      sessionId: "ddd445556",
+      isPopular: true,
+      piecePrice: 2,
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
+    },
+
+    {
+      imageUrls: [
+        {
+          index: 0,
+          file: "../assets/image/mushrooms.png",
         },
       ],
       title: "Verkoop uw champignons direct uit onze voorraad",
-      categoryName: "Chamoignons",
+      categoryName: "chamoignons",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
       description: "hhjdfhjfjhd",
@@ -239,7 +287,30 @@ export class HomepageComponent {
       imageUrls: [
         {
           index: 0,
-          file: "../assets/image/knoflook.jpeg",
+          file: "../assets/image/potatoes.png",
+        },
+      ],
+      title: "Verkoop uw aardappelen direct uit onze voorraad",
+      categoryName: "Aardappelen",
+      productId: "jhjjjk",
+      categoryId: "vvvvvvv",
+      description: "hhjdfhjfjhd",
+      quantity: 3,
+      sessionId: "ddd445556",
+      isPopular: true,
+      piecePrice: 2,
+      kilo : 4,
+      instokeOfPiece: 4,
+      cratePrice: 4,
+      crateQuantity: 4,
+      instokeOfCrate: 4,
+     
+    },
+    {
+      imageUrls: [
+        {
+          index: 0,
+          file: "../assets/image/garlic.png",
         },
       ],
       title: "Verkoop uw Knoflook direct uit onze voorraad",
@@ -266,7 +337,7 @@ export class HomepageComponent {
           file: "../assets/image/cressAit.png",
         },
       ],
-      title: "Verkoop uw Knoflook direct uit onze voorraad",
+      title: "Verkoop uw cressen direct uit onze voorraad",
       categoryName: "Cressen",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
@@ -290,7 +361,7 @@ export class HomepageComponent {
           file: "../assets/image/KruidenAit.png",
         },
       ],
-      title: "Verkoop uw Knoflook direct uit onze voorraad",
+      title: "Verkoop uw Kruiden direct uit onze voorraad",
       categoryName: "Kruiden",
       productId: "jhjjjk",
       categoryId: "vvvvvvv",
