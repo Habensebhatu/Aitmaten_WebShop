@@ -148,7 +148,7 @@ onRemoveQuantityCrate(productId: string) {
     clearTimeout(this.checkoutTimeout);
     this.checkoutTimeout = setTimeout(() => {
       this.cartService.triggerCheckout(); 
-    }, 90000); 
+    }, 900000); 
 }
 
 onAddCrateToCart(product: Product, cratePrice: number): void {
@@ -177,7 +177,7 @@ onAddCrateToCart(product: Product, cratePrice: number): void {
     clearTimeout(this.checkoutTimeout);
     this.checkoutTimeout = setTimeout(() => {
       this.cartService.triggerCheckout(); 
-    }, 90000); 
+    }, 900000); 
 }
 
 
