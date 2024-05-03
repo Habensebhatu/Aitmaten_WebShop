@@ -26,7 +26,6 @@ export class LoginComponent {
 
   ngOnInit() {
     this.metaService.addTag({ rel: 'canonical', href: 'https://sofanimarket.com/' });
-    console.log("testettdghvdhv");
       this.loginForm = this.formBuilder.group({
           username: ['', Validators.required],
           password: ['', Validators.required]

@@ -19,18 +19,21 @@
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-            <mat-form-field class="w-full">
-              <mat-label>BTW</mat-label>
-              <input matInput formControlName="btw" />
-            </mat-form-field>
-            <mat-form-field class="w-full">
-              <mat-label>E-mail</mat-label>
-              <input matInput formControlName="email" />
-            </mat-form-field>
-            <div *ngIf="registerForm.get('email')?.hasError('misUserName')" class="text-red-500 p-2">
-              E-mail bestaat al
+            <div>
+              <mat-form-field class="w-full">
+                <mat-label>BTW</mat-label>
+                <input matInput formControlName="btw" />
+              </mat-form-field>
             </div>
-
+            <div>
+              <mat-form-field class="w-full">
+                <mat-label>E-mail</mat-label>
+                <input matInput formControlName="email" />
+              </mat-form-field>
+              <div *ngIf="registerForm.get('email')?.hasError('misUserName')" class="text-red-500 p-2">
+                E-mail bestaat al
+              </div>
+            </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
             <div>
@@ -101,10 +104,12 @@
           >
             Registreren
           </button> -->
-
-          <button class="mt-4 bg-[#4CAF50] text-white py-2 px-2 text-sm rounded hover:bg-[#4CAF50] w-full mt-4"   type="submit">
+         <div>
+          <button class="mt-4 bg-[#4CAF50] text-white py-2 px-2 text-sm rounded hover:bg-[#4CAF50] w-full mt-4"
+            type="submit">
             Registreren
           </button>
+        </div>
           <div class="border-t my-4"></div>
           <p class="text-sm pb-lg-2">
             Heb je al een account?
