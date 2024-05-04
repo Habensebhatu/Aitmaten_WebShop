@@ -5,6 +5,7 @@ import { Subject, of, switchMap, takeUntil } from 'rxjs';
 import { Product } from 'src/app/Models/product.model';
 import { CartService } from 'src/app/service/cart.service';
 import { UserRegistrationService } from 'src/app/service/user-registration.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -16,7 +17,6 @@ export class AppProductGridComponent {
   
   @Input() products: Product[] | undefined;
   wishlistProductIds: string[] = [];
-  private unsubscribe$ = new Subject<void>();
   Quetity = 1;
   pieceQuantity = 1;
   crateQuantity = 1;
@@ -25,7 +25,7 @@ export class AppProductGridComponent {
   currentUserApproved: boolean = false;
   quantitiesCrate = new Map<string, { crate: number, message: boolean }>();
    quantitiesPiece = new Map<string, { piece: number, message: boolean }>(); 
-  constructor( private router: Router, private cartService: CartService, private _snackBar: MatSnackBar, private userService: UserRegistrationService){
+  constructor( private router: Router, private cartService: CartService, private _snackBar: MatSnackBar, private userService: UserRegistrationService, private cdr: ChangeDetectorRef){
 
   }
   navigateToProductDetails(productId: string): void {
@@ -39,10 +39,19 @@ export class AppProductGridComponent {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['products']) {
+    if (changes['products'] && changes['products'].currentValue) {
+      console.log('Products have changed:', changes['products'].currentValue);
       this.filterAvailableProducts();
+      this.cdr.detectChanges();
     }
   }
+  filterAvailableProducts(): void {
+    if (this.products) {
+      this.availableProducts = this.products.filter(product => product.instokeOfCrate > 0 || product.instokeOfPiece > 0);
+      console.log("Filtered products: ",  this.availableProducts);
+    }
+  }
+  
 
   loadCurrentUser(): void {
     this.userService.currentUser.pipe(
@@ -65,12 +74,7 @@ export class AppProductGridComponent {
     });
   }
 
-  filterAvailableProducts(): void {
-    if (this.products) {
-      this.availableProducts = this.products.filter(product => product.instokeOfCrate > 0 || product.instokeOfPiece > 0);
-      console.log("Filtered products: ",  this.availableProducts);
-    }
-  }
+  
    
  
 onAddQuantityCrate(productId: string, instock: number, contents: number) {

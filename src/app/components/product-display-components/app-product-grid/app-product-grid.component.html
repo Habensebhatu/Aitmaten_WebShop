@@ -4,14 +4,10 @@
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div *ngFor="let product of availableProducts">
           <article class="wish-product relative shadow-lg transition-all duration-300">
-            <!-- Product Image -->
             <div class="product-image relative">
               <a [routerLink]="['/product', product.productId]">
                 <img [src]="product.imageUrls[0].file" class="w-full h-64 object-cover" />
               </a>
-              <!-- <div class="absolute top-0 left-0 bg-[#4CAF50] text-white p-2">
-                Aanbieding
-              </div> -->
             </div>
             <div class="product-caption mt-4 cursor-pointer p-4">
               <div class="flex justify-between items-center mb-2">
