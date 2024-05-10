@@ -10,11 +10,11 @@ import { MailRequestModel } from '../Models/MailRequest';
 export class UserRegistrationService {
   // private apiUrl = 'https://localhost:7087/api/Registration';
   // private loginApiUrl = 'https://localhost:7087/api/Registration/login';
-  private contactUsApiUrl = 'https://localhost:7087/api/ContactUs/SubmitContactRequest';
+  // private contactUsApiUrl = 'https://localhost:7087/api/ContactUs/SubmitContactRequest';
   // private emailServiceApiUrl = 'https://localhost:7087/api/EmailService';
   private apiUrl = 'https://webshopfilimon.azurewebsites.net/api/Registration';
   private loginApiUrl = 'https://webshopfilimon.azurewebsites.net/api/Registration/login';
-  // private contactUsApiUrl = 'https://webshopfilimon.azurewebsites.net/api/ContactUs/SubmitContactRequest';
+  private contactUsApiUrl = 'https://webshopfilimon.azurewebsites.net/api/ContactUs/SubmitContactRequest';
   private emailServiceApiUrl = 'https://webshopfilimon.azurewebsites.net/api/EmailService/';
   private currentUserSubject: BehaviorSubject<UserRegistration | null> = new BehaviorSubject<UserRegistration | null>(null);
   public currentUser: Observable<UserRegistration | null> = this.currentUserSubject.asObservable();
