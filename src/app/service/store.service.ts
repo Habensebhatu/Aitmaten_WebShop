@@ -25,7 +25,6 @@ export class StoreService {
   connectionStringName = 'Aitmaten';
 
   changeShowData(value: string): void {
-    
     this.showDataSubject.next(value);
   }
 

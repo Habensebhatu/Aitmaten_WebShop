@@ -67,6 +67,7 @@ export class HeaderComponent {
   handleCategorySelect(categoryName: string): void {
     this.categoriesChange(categoryName);
     this.closeMenu();
+    this.router.navigate(['/shop', categoryName]);
   }
 
   fetchWishlistProductIds(): void {
