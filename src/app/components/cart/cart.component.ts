@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { loadStripe } from '@stripe/stripe-js';
+// import { loadStripe } from '@stripe/stripe-js';
 import { Subscription } from 'rxjs';
 import { UserRegistration } from 'src/app/Models/ UserRegistration';
 import { MailRequestModel } from 'src/app/Models/MailRequest';
