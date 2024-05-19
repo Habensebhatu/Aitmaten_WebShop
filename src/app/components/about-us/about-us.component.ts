@@ -7,7 +7,8 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./about-us.component.css']
 })
 export class AboutUsComponent {
-log = "Aitmatenimage.jpeg";
+log = "logaitmatenf.jpeg"
+ 
 
 constructor( private route: ActivatedRoute, 
   private router: Router){
