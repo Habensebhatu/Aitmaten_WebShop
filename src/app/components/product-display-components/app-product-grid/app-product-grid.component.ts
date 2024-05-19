@@ -35,12 +35,10 @@ export class AppProductGridComponent {
   
   ngOnInit() {
     this.loadCurrentUser();
-    console.log("products", this.products)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['products'] && changes['products'].currentValue) {
-      console.log('Products have changed:', changes['products'].currentValue);
       this.filterAvailableProducts();
       this.cdr.detectChanges();
     }
@@ -48,7 +46,6 @@ export class AppProductGridComponent {
   filterAvailableProducts(): void {
     if (this.products) {
       this.availableProducts = this.products.filter(product => product.instokeOfCrate > 0 || product.instokeOfPiece > 0);
-      console.log("Filtered products: ",  this.availableProducts);
     }
   }
   
@@ -76,7 +73,6 @@ export class AppProductGridComponent {
 
   
    
- 
 onAddQuantityCrate(productId: string, instock: number, contents: number) {
   let quantityCrate = this.quantitiesCrate.get(productId) || {  crate: 0, message: false };
   const totalAdded = quantityCrate.crate * contents;
@@ -96,7 +92,6 @@ onAddQuantityPiece(productId: string,  instock: number) {
   let quantity = this.quantitiesPiece.get(productId) || { piece: 0,  message: false };
     if ((quantity.piece + 1) <= instock) {
       quantity.piece++;
-      console.log(" quantity.piece",  quantity.piece)
       quantity.message = false;
     } else {
       quantity.message = true; 

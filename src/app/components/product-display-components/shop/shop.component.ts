@@ -78,7 +78,6 @@ export class ShopComponent {
   
 
 filterByCategory(category: string) {
-  console.log("categorycategory", category)
   this.storeService
     .getProductBYCategory(category, this.currentPage, this.pageSize)
     .pipe(takeUntil(this.unsubscribe$))
@@ -97,7 +96,7 @@ filterByCategory(category: string) {
 OnshowCategoty(newCatagory: string): void {
   if (newCatagory !== this.selectedCategory) {
     this.currentPage = 1;
-    this.getProducts(); // Deze aanroep lijkt ook de products te updaten, is dit nodig?
+    this.getProducts(); 
     this.category = newCatagory;
     this.filterByCategory(newCatagory);
     this.selectedCategory = newCatagory;
@@ -130,7 +129,6 @@ OnshowCategoty(newCatagory: string): void {
       this.route.params.subscribe((params) => {
         if (params["name"]) {
           this.category = params["name"];
-          console.log("getCategoryByURL", this.category!)
           this.filterByCategory(this.category!);
         }
       });
@@ -198,7 +196,6 @@ OnshowCategoty(newCatagory: string): void {
       this.selectedPrice = undefined;
       this.minNumber = undefined;
       this.maxNumber = undefined;
-      console.log("togglePriceSelectiontogglePriceSelection", this.category!)
       this.filterByCategory(this.category!);
       this.getProducts();
     } else {
@@ -254,10 +251,8 @@ OnshowCategoty(newCatagory: string): void {
     this.currentPage = page;
     window.scrollTo(0, 0);
     if (this.selectedCategory == undefined) {
-      console.log("goToPagegoToPage", this.category!)
       this.filterByCategory(this.category!);
     } else {
-      console.log("goToPagegoToPage22", this.category!)
       this.filterByCategory(this.selectedCategory!);
     }
   }
@@ -269,10 +264,8 @@ OnshowCategoty(newCatagory: string): void {
     }
 
     if (this.selectedCategory == undefined) {
-      console.log("previousPagepreviousPage", this.category!)
       this.filterByCategory(this.category!);
     } else {
-      console.log("previousPagepreviousPage222", this.category!)
       this.filterByCategory(this.selectedCategory!);
     }
   }

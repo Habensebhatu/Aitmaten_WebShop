@@ -308,10 +308,9 @@ input:focus {
   }
 }
 
-/* In your component.css or styles.css */
 .custom-green-button {
-  background-color: #5aa35b !important; /* Custom green background */
-  color: white !important; /* White text */
+  background-color: #5aa35b !important; 
+  color: white !important; 
   padding: 4px 10px !important; /* Smaller padding for a smaller button */
 }
 

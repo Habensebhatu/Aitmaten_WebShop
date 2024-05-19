@@ -42,8 +42,6 @@ export class HeaderComponent {
   ) {}
 
   ngOnInit(): void {
-  
-    this.fetchWishlistProductIds();
     this.cartService.showMenu$.subscribe(() => {
       this.openCartMenu();
     });
@@ -70,14 +68,7 @@ export class HeaderComponent {
     this.router.navigate(['/shop', categoryName]);
   }
 
-  fetchWishlistProductIds(): void {
-    // this.wishlistService
-    //   .getWishlistProducts()
-    //   .pipe(takeUntil(this.unsubscribe$))
-    //   .subscribe((products) => {
-    //     this.wishlistService.setWishlistCount(products.length);
-    //   });
-  }
+  
   clearInput() {
     const inputElement = document.querySelector(
       ".search-input"
@@ -124,18 +115,13 @@ export class HeaderComponent {
     this.languageMenu = true;
   }
 
-  onCategorySelect(category: string): void {
-    console.log("You selected: ", category);
-  }
+  // onCategorySelect(category: string): void {
+  // }
 
   set cart(cart: CartI) {
-    console.log("cart.items", cart.items)
     this.itemsQuantity = cart.items
       .map((item) => item.quantity / (item.kilo! > 1 ? item.kilo! : 1))
       .reduce((prev, curent) => prev + curent, 0);
-
-      console.log("this.itemsQuantity", this.itemsQuantity)
-
   }
 
   categoriesChange(category: string) {
