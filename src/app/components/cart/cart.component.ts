@@ -38,6 +38,7 @@ export class CartComponent{
  checkoutSubscription: Subscription | undefined;
  timeSubscription: Subscription | undefined;
  cancelTime: string | undefined;
+ errorMessage: string | null = null;
 constructor(private cartService: CartService, private http: HttpClient, private storeService: StoreService, private userService: UserRegistrationService, private router: Router){}
 ngOnInit(){
   this.cartService.cart.subscribe((_cart: CartI)=>{
@@ -72,6 +73,12 @@ this.cancelTime = cancelTimeTosting
 
 
 onCheckout(): void {
+
+  const totalAmount = this.getTotal(this.Products);
+    if (totalAmount < 100) {
+      this.errorMessage = 'Het minimale bestelbedrag is €100.';
+      return;
+    }
   this.userService.currentUser.subscribe(user => {
     if (!user) return; 
     
